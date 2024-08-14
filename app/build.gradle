@@ -57,8 +57,8 @@ dependencies {
     // Street View metadata checks, etc.
     implementation 'com.google.maps.android:maps-compose-utils:6.1.0'
 
-    // Optionally, you can include the widgets library for ScaleBar, etc.
-//    implementation 'com.google.maps.android:maps-compose-widgets:6.1.0'
+    //cognito
+    implementation 'com.amplifyframework:aws-auth-cognito:1.36.2'
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
