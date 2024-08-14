@@ -18,11 +18,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        def yelpApiKey = project.hasProperty('YELP_API_KEY') ? project.YELP_API_KEY : ""
-        buildConfigField("String", "YELP_API_KEY", "\"${yelpApiKey}\"")
-
-        def mapsApiKey = project.hasProperty('MAPS_API_KEY') ? project.MAPS_API_KEY : ""
-        buildConfigField("String", "MAPS_API_KEY", "\"${mapsApiKey}\"")
     }
 
     buildTypes {
@@ -55,11 +50,11 @@ android {
 dependencies {
 
     //map
-    implementation 'com.google.maps.android:maps-compose:6.1.0'
+//    implementation 'com.google.maps.android:maps-compose:6.1.0'
 
     // Optionally, you can include the Compose utils library for Clustering,
     // Street View metadata checks, etc.
-    implementation 'com.google.maps.android:maps-compose-utils:6.1.0'
+//    implementation 'com.google.maps.android:maps-compose-utils:6.1.0'
 
     // Optionally, you can include the widgets library for ScaleBar, etc.
     implementation 'com.google.maps.android:maps-compose-widgets:6.1.0'
