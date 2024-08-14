@@ -44,8 +44,11 @@ class ArtViewModel: ViewModel() {
     private var _searchState = mutableStateOf(SearchState())
     val searchState: State<SearchState> = _searchState
 
+    private var currentPage = 1
+
 
     fun onSearch() {
+        currentPage = 1
         _searchState.value = SearchState(searchOperation = SearchOperation.LOADING)
         viewModelScope.launch {
             _searchState.value = SearchState(
@@ -55,7 +58,8 @@ class ArtViewModel: ViewModel() {
                                 ArtSource(
                                     artRepository = artRepository,
                                     paginateData =  Paginate(
-                                        query=_queryText.value
+                                        query=_queryText.value,
+                                        page=currentPage
                                     )
                                 )
                             }

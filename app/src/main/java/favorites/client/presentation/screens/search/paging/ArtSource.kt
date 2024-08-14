@@ -19,20 +19,32 @@ class ArtSource (
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Datum> {
         return try {
-            val prev = params.key ?: 0
+            val currentPage = params.key ?: 1
+
 
             val response = artRepository.getArtwork(
-                limit = 10,
-                page = paginateData.page,
-                query = paginateData.query
+                limit = params.loadSize,
+                page = currentPage,
+                offset = (currentPage-1) * params.loadSize,
+                query = paginateData.query,
+                fields = paginateData.fields
             )
 
             if (response.isSuccessful) {
-                val body = response.body()?.data
+                val body = response.body()?.data ?: emptyList()
+                val pagination = response.body()?.pagination
+                val nextKey = if (pagination?.currentPage ?: 0 < pagination?.totalPages ?: 0) {
+                    currentPage + 1
+                } else {
+                    null
+                }
+
+
+
                 LoadResult.Page(
                     data = body!!,
-                    prevKey = if (prev == 0) null else prev - 1,
-                    nextKey = if (body.size < params.loadSize) null else prev + 10
+                    prevKey = if (currentPage == 1) null else currentPage- 1,
+                    nextKey = nextKey
                 )
             } else {
                 LoadResult.Error(Exception(response.message()))

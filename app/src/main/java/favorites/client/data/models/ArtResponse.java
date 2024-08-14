@@ -1,13 +1,10 @@
 package favorites.client.data.models;
 
 import java.util.List;
-//import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.processing.Generated;
 
-//@Generated("jsonschema2pojo")
 public class ArtResponse {
 
     @SerializedName("preference")
@@ -15,10 +12,10 @@ public class ArtResponse {
     private Object preference;
     @SerializedName("pagination")
     @Expose
-    private favorites.client.data.repository.Pagination pagination;
+    private favorites.client.data.models.Pagination pagination;
     @SerializedName("data")
     @Expose
-    private List<favorites.client.data.repository.Datum> data;
+    private List<favorites.client.data.models.Datum> data;
     @SerializedName("info")
     @Expose
     private Info info;
@@ -34,19 +31,19 @@ public class ArtResponse {
         this.preference = preference;
     }
 
-    public favorites.client.data.repository.Pagination getPagination() {
+    public favorites.client.data.models.Pagination getPagination() {
         return pagination;
     }
 
-    public void setPagination(favorites.client.data.repository.Pagination pagination) {
+    public void setPagination(favorites.client.data.models.Pagination pagination) {
         this.pagination = pagination;
     }
 
-    public List<favorites.client.data.repository.Datum> getData() {
+    public List<favorites.client.data.models.Datum> getData() {
         return data;
     }
 
-    public void setData(List<favorites.client.data.repository.Datum> data) {
+    public void setData(List<favorites.client.data.models.Datum> data) {
         this.data = data;
     }
 

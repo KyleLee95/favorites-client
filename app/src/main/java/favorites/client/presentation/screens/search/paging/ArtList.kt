@@ -36,7 +36,6 @@ fun ArtList(artViewModel: ArtViewModel, navController: NavController) {
             }
         }
 
-        //this will display a spinner in-place of a BookRow in the following events
         lazyPagingItems.apply {
             //fallthrough is not supported
             when {

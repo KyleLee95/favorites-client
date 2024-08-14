@@ -1,4 +1,3 @@
-
 package favorites.client.data.models;
 
 //import javax.annotation.Generated;

@@ -47,8 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.skydoves.landscapist.glide.GlideImage
 //import com.skydoves.landscapist.glide.GlideImage
 import favorites.client.common.Constants
+import favorites.client.common.Constants.modifier
 import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.ui.theme.ErrorRed
 import favorites.ui.theme.SuccessGreen
@@ -62,7 +64,7 @@ fun DetailsScreen(
 ) {
 
     //observe the book
-//    val business = businessViewModel.business.value
+    val artwork = artViewModel.artwork.value
     val activity = (LocalContext.current as? Activity)
 
 
@@ -102,58 +104,8 @@ fun DetailsScreen(
                                 .align(Alignment.CenterVertically)
                         ) {
 
-//                            Icon(imageVector = Icons.Default.Share,
-//                                contentDescription = "Share",
-//                                modifier = Modifier
-//                                    .clickable {
-//                                        val sendIntent = Intent(Intent.ACTION_SEND)
-//                                        sendIntent.type = "text/plain"
-//                                        sendIntent.putExtra(
-//                                            Intent.EXTRA_TEXT,
-//                                            "Check out this place!: ${business.name}"
-//                                        )
-//                                        activity?.startActivity(sendIntent)
-//                                    }
-//                                    .align(Alignment.CenterVertically)
-//                                    .padding(10.dp, 0.dp, 0.dp, 0.dp))
                             Spacer(modifier = Modifier.width(20.dp))
-//                            Icon(painter = painterResource(id = R.drawable.ic_navigation),
-//                                contentDescription = "Map",
-//                                modifier = Modifier
-//                                    .clickable {
-//                                        val streetName = business.location.address1
-//                                        val streetType = business.location.address2
-//                                        val unit = business.location.address3
-//                                        val city = business.location.city
-//                                        val state = business.location.state
-//                                        val zipcode = business.location.zipCode
-//                                        val businessAddress =
-//                                            "${streetName} ${streetType} ${unit}, ${city}, ${state}, ${zipcode}"
-//                                        val intent = Intent(
-//                                            Intent.ACTION_VIEW,
-//                                            Uri.parse(
-//                                                "google.navigation:q=$businessAddress"
-//                                            )
-//                                        )
-//                                        activity?.startActivity(intent)
-//                                    }
-//                                    .align(Alignment.CenterVertically)
-//                                    .padding(10.dp, 0.dp, 10.dp, 0.dp))
                             Spacer(modifier = Modifier.width(20.dp))
-//                            Icon(imageVector = Icons.Default.Phone,
-//                                contentDescription = "Phone",
-//                                modifier = Modifier
-//                                    .clickable {
-//                                        //this would be used for dialing if you have a phone number
-//                                        val phoneNumber = business.phone
-//                                        val intent = Intent(
-//                                            Intent.ACTION_DIAL,
-//                                            Uri.parse("tel:$phoneNumber")
-//                                        )
-//                                        activity?.startActivity(intent)
-//                                    }
-//                                    .align(Alignment.CenterVertically)
-//                                    .padding(0.dp, 0.dp, 20.dp, 0.dp))
                         }
 
                     }
@@ -178,52 +130,104 @@ fun DetailsScreen(
                 HorizontalDivider()
                 Spacer(Modifier.height(20.dp))
                 //we can use either coil or glide for images. If you need animations, use coil
-//                GlideImage(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .size(300.dp),
-//                    imageModel = business.imageUrl ?: "https://picsum.photos/id/1026/200/300",
-//                    contentScale = ContentScale.Fit
-//                )
-//                with(business) {
-//                    name?.let {
-//                        Text(
-//                            text = it,
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .align(Alignment.Start),
-//                            style = TextStyle(fontWeight = FontWeight.Bold),
-//                            textAlign = TextAlign.Start,
-//                            fontSize = 22.sp
-//                        )
-//                    }
-//                    //rating
-//                    rating?.let {
-//                        Row(
-//                            modifier = Modifier.align(Alignment.Start),
-//                        ) {
-//                            for (i in 1..it.toInt()) {
-//                                Icon(
-//                                    modifier = Modifier
-//                                        .fillMaxHeight()
-//                                        .align(Alignment.CenterVertically),
-//                                    painter = painterResource(id = R.drawable.star_box),
-//                                    contentDescription = "Review Star",
-//                                )
-//                            }
-//                            Text(
-//                                text = "(${business.reviewCount} reviews)",
-//                                modifier = Modifier
-//                                    .fillMaxHeight()
-//                                    .align(Alignment.CenterVertically)
-//                                    .padding(5.dp, 0.dp),
-//                                style = TextStyle(fontWeight = FontWeight.Bold),
-//                                textAlign = TextAlign.Start,
-//                                fontSize = 22.sp
-//                            )
-//                        }
-//                    }
-                    //hours
+                GlideImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(300.dp),
+                    imageModel = "https://www.artic.edu/iiif/2/".plus(artwork.imageId)
+                        .plus("/full/843,/0/default.png"),
+                    contentScale = ContentScale.Fit
+                )
+                with(artwork) {
+                    title?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+
+                    artistDisplay?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+
+                    placeOfOrigin?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+                    mediumDisplay?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+                    dimensions?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+                    styleTitle?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+                    exhibitionHistory?.let{
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Start),
+                            style = TextStyle(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Start,
+                            fontSize = 22.sp
+                        )
+                    }
+
+
+
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -282,18 +286,11 @@ fun DetailsScreen(
                     Text(text = "Add to Favorites")
                 }
 
-//                val yelpLocation =
-//                    LatLng(business.coordinates.latitude, business.coordinates.longitude)
-
-//                YelpMap(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(300.dp),
-//                    yelpLocation = yelpLocation
-//                )
             }
         }
+    }
 }
+
 
 
 
