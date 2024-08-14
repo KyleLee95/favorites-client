@@ -13,8 +13,7 @@ object Constants {
     val modifier = Modifier.padding(paddingValues = PaddingValues(all = 0.dp))
     val favoritesServiceBaseUrl = "http://localhost:8000/favorites/" //change for prod
     val loggingServiceBaseUrl = "http://localhost:8001/logging-service/" //change for prod
-    val artApiServiceBaseUrl = "https://cb58-70-107-215-6.ngrok-free.app/"
-//    val artApiServiceBaseUrl = "https://api.artic.edu/api/v1/"
+    val artApiServiceBaseUrl = "https://cb58-70-107-215-6.ngrok-free.app/" // Route our outbound API calls through our own backend.
     val fakeArtworkResponse: ArtResponse
     val fakeArtwork: Datum
 

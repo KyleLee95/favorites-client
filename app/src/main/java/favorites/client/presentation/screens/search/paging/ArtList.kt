@@ -29,28 +29,11 @@ fun ArtList(artViewModel: ArtViewModel, navController: NavController) {
             key = lazyPagingItems.itemKey(),
             contentType = lazyPagingItems.itemContentType()
         ) { index ->
-            //the following lines define the onItemClick behavior
             val boolArtwork = lazyPagingItems[index]!!
             ArtworkRow(artwork = boolArtwork){
                 artViewModel.setArtwork(boolArtwork)
                 navController.navigate(route=Screen.Detail.route)
-
             }
-
-//            PokemonRow(pokemon = boolPokemon) {
-//                pokemonViewModel.setPokemon(boolPokemon)
-//                navController.navigate(route=Screen.Detail.route)
-//
-//            }
-
-//            BookRow(book = boolItem) {
-//                //the following lines define the onItemClick behavior
-//                bookViewModel.setBook(boolItem)
-//                navController.navigate(
-//                    route = Screen.Detail.route
-//                )
-//            }
-
         }
 
         //this will display a spinner in-place of a BookRow in the following events

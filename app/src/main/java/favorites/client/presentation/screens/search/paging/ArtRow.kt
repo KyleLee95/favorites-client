@@ -26,6 +26,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
 import favorites.client.data.models.Datum
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.ui.graphics.asImageBitmap
+
+
+fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
+    // Remove the header from the base64 string if it exists
+    val cleanBase64String = base64Str.substringAfter("base64,")
+
+    // Decode the base64 string into a byte array
+    val decodedBytes = Base64.decode(cleanBase64String, Base64.DEFAULT)
+
+    // Convert the byte array into a Bitmap
+    return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+}
 
 @Composable
 fun ArtworkRow(
@@ -37,7 +53,6 @@ fun ArtworkRow(
             .fillMaxWidth()
             .clickable {
                 artwork.title?.let {
-                    //passed down from composable (BookList) that instantiates BookRow
                     onItemClick(it)
                 }
             }
@@ -51,26 +66,40 @@ fun ArtworkRow(
         Row(horizontalArrangement = Arrangement.Start) {
 
             Surface(modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)) {
-//                we use coil library here to get fadeIn effect
-//                val image = rememberCoilPainter(
-//                    request = artwork.thumbnail?.replace("http", "https") ?: "https://picsum.photos/id/1026/60/90",
-//                    fadeIn = true)
-//                Image(
-//                    painter = image,
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .width(60.dp)
-//                        .height(90.dp),
-//                    contentScale = ContentScale.FillHeight
-//                )
-
+                // Check if the thumbnail is a base64 string or a URL
+                if (artwork.thumbnail.lqip != null) {
+                    // Handle base64 encoded images
+                    val bitmap = decodeBase64ToBitmap(artwork.thumbnail.lqip)
+                    bitmap?.let {
+                        Image(
+                            bitmap = it.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(90.dp),
+                            contentScale = ContentScale.FillHeight
+                        )
+                    }
+                } else {
+                    // Handle URL images with Coil
+                    val image = rememberCoilPainter(
+                        request ="https://picsum.photos/id/1026/60/90",
+                        fadeIn = true
+                    )
+                    Image(
+                        painter = image,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(60.dp)
+                            .height(90.dp),
+                        contentScale = ContentScale.FillHeight
+                    )
+                }
             }
 
-            Column() {
-
+            Column {
                 Text(
-                    //sometimes, the authors are null; for example when it is a United Nations report
-                    text = artwork.title,
+                    text = artwork.title ?: "No Title",
                     style = TextStyle(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.Start,
                     fontSize = 18.sp
