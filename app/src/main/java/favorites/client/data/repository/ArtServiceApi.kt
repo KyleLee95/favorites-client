@@ -10,21 +10,11 @@ import retrofit2.http.Query
 
 
 interface ArtServiceApi {
-    @GET(value = "/")
+    @GET(value = "artworks/search")
     suspend fun getArtworks(
+        @Query("query") q: String,
         @Query("page") page: Int,
-        @Query("limit") limit: Int,
-        @Query("query") query: String
+        @Query("limit") limit: Int
     ): Response<ArtResponse>
 
-
-//    @GET(value="pokemon/{id}/")
-//    suspend fun getPokemonDetailsById(
-//        @Path("id") id: Int
-//    ): Response<PokemonDetailsResponse>
-//
-//    @GET(value="pokemon/{name}/")
-//    suspend fun getPokemonDetailsByName(
-//        @Path("name") name: String
-//    ):Response<PokemonDetailsResponse>
 }

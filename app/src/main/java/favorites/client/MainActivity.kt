@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import favorites.client.presentation.navigation.Navigation
+import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.ui.theme.ClientTheme
 
 
@@ -27,7 +28,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 )
                 {
-                    Navigation(navController = navController)
+                    Navigation(
+                        artViewModel =  ArtViewModel(),
+                        navController = navController)
                 }
             }
         }

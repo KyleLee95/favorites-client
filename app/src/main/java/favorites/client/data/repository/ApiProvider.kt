@@ -31,14 +31,6 @@ object ApiProvider {
     }
 
 
-    fun pokemonApi(): PokemonServiceApi {
-        return Retrofit.Builder()
-            .baseUrl(Constants.pokemonapiServiceBaseUrl)
-            .client(getOkHttpClient())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(PokemonServiceApi::class.java)
-    }
 
     fun loggingApi(): LoggingServiceApi{
         return Retrofit.Builder()

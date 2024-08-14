@@ -1,11 +1,13 @@
 
 package favorites.client.data.models;
 
-import javax.annotation.Generated;
+//import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Generated("jsonschema2pojo")
+import javax.annotation.processing.Generated;
+
+//@Generated("jsonschema2pojo")
 public class Thumbnail {
 
     @SerializedName("alt_text")

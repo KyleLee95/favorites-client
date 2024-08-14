@@ -29,8 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import favorites.client.presentation.screens.search.paging.PokemonList
+import favorites.client.presentation.screens.search.paging.ArtList
 import favorites.client.presentation.screens.search.paging.SearchOperation
+import favorites.client.presentation.viewmodels.ArtViewModel
 
 
 @Composable
@@ -75,18 +76,18 @@ fun CustomOutlinedTextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    pokemonViewModel: PokemonViewModel,
+    artViewModel: ArtViewModel,
     navController: NavController
 ) {
-    val state = pokemonViewModel.searchState.value
-    val queryText = pokemonViewModel.queryText.value
+    val state = artViewModel.searchState.value
+    val queryText = artViewModel.queryText.value
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Search Pokemon",
+                        text = "Search the Art Institute's collection",
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
                         textAlign = TextAlign.Center,
@@ -106,13 +107,13 @@ fun SearchScreen(
             verticalArrangement = Arrangement.Center,
         ) {
             CustomOutlinedTextField(
-                title = "For a pokemon",
-                placeHolder = "e.g. Pikachu",
+                title = "Search the AIC's Collection",
+                placeHolder = "e.g. Van Gogh",
                 textState = queryText,
-                onTextChange = pokemonViewModel::setQueryText,
+                onTextChange = artViewModel::setQueryText,
                 keyboardType = KeyboardType.Text,
                 ImeAction.Search,
-                pokemonViewModel::onSearch
+                artViewModel::onSearch
             )
 
 
@@ -132,9 +133,8 @@ fun SearchScreen(
                     }
                 }
                 SearchOperation.DONE -> {
-                    PokemonList(pokemonViewModel = pokemonViewModel, navController = navController)
+                    ArtList(artViewModel = artViewModel, navController=navController)
                 }
-
                 else -> {
                     Box {}
                 }

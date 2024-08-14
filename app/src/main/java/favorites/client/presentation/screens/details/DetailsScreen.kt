@@ -49,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 //import com.skydoves.landscapist.glide.GlideImage
 import favorites.client.common.Constants
+import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.ui.theme.ErrorRed
 import favorites.ui.theme.SuccessGreen
 
@@ -56,7 +57,7 @@ import favorites.ui.theme.SuccessGreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsScreen(
-    pokemonViewModel: PokemonViewModel,
+    artViewModel: ArtViewModel,
     navController: NavController
 ) {
 
@@ -299,6 +300,6 @@ fun DetailsScreen(
 @Composable
 @Preview
 fun DetailsPreview() {
-    val pokemonViewModel = PokemonViewModel()
-    DetailsScreen(pokemonViewModel=pokemonViewModel, navController = rememberNavController())
+    val artViewModel = ArtViewModel()
+    DetailsScreen(artViewModel=artViewModel, navController = rememberNavController())
 }

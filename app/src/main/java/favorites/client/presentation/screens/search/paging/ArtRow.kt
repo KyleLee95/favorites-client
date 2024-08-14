@@ -25,18 +25,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
-import favorites.client.data.models.pokemonlist.Result
+import favorites.client.data.models.Datum
 
 @Composable
-fun PokemonRow(
-    pokemon: Result,
+fun ArtworkRow(
+    artwork: Datum,
     onItemClick: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                pokemon.name?.let {
+                artwork.title?.let {
                     //passed down from composable (BookList) that instantiates BookRow
                     onItemClick(it)
                 }
@@ -51,9 +51,9 @@ fun PokemonRow(
         Row(horizontalArrangement = Arrangement.Start) {
 
             Surface(modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)) {
-                //we use coil library here to get fadeIn effect
+//                we use coil library here to get fadeIn effect
 //                val image = rememberCoilPainter(
-//                    request = book.volumeInfo?.imageLinks?.smallThumbnail?.replace("http", "https") ?: "https://picsum.photos/id/1026/60/90",
+//                    request = artwork.thumbnail?.replace("http", "https") ?: "https://picsum.photos/id/1026/60/90",
 //                    fadeIn = true)
 //                Image(
 //                    painter = image,
@@ -70,12 +70,12 @@ fun PokemonRow(
 
                 Text(
                     //sometimes, the authors are null; for example when it is a United Nations report
-                    text = pokemon.name,
+                    text = artwork.title,
                     style = TextStyle(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.Start,
                     fontSize = 18.sp
                 )
-                Text(text = pokemon.name ?: "None")
+                Text(text = artwork.title ?: "None")
             }
         }
     }

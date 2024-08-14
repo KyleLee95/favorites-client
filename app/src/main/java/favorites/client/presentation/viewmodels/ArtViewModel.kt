@@ -13,7 +13,6 @@ import favorites.client.data.models.ArtResponse
 import favorites.client.data.models.Datum
 import favorites.client.data.repository.ApiProvider
 import favorites.client.data.repository.ArtRepository
-import favorites.client.data.repository.PokemonRepository
 import favorites.client.presentation.screens.search.paging.ArtSource
 import favorites.client.presentation.screens.search.paging.Paginate
 //import favorites.client.presentation.screens.search.paging.PokemonSource
@@ -33,13 +32,12 @@ class ArtViewModel: ViewModel() {
         _queryText.value = query
     }
 
-    private var _artwork = mutableStateOf(Constants.fakeArtworkResponse)
-    val artwork: State<ArtResponse> = _artwork
+    private var _artwork = mutableStateOf(Constants.fakeArtwork)
+    val artwork: State<Datum> = _artwork
 
-
-
-
-
+    fun setArtwork(artwork: Datum) {
+        _artwork.value = artwork
+    }
 
 
 

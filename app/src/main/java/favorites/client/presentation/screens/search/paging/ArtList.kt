@@ -15,12 +15,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import favorites.client.presentation.navigation.Screen
+import favorites.client.presentation.viewmodels.ArtViewModel
 
 @Composable
-fun PokemonList(pokemonViewModel: PokemonViewModel, navController: NavController) {
+fun ArtList(artViewModel: ArtViewModel, navController: NavController) {
 
     //this is what consumes the flow
-    val lazyPagingItems = pokemonViewModel.searchState.value.data?.collectAsLazyPagingItems()
+    val lazyPagingItems = artViewModel.searchState.value.data?.collectAsLazyPagingItems()
 
     LazyColumn {
         items(
@@ -29,12 +30,18 @@ fun PokemonList(pokemonViewModel: PokemonViewModel, navController: NavController
             contentType = lazyPagingItems.itemContentType()
         ) { index ->
             //the following lines define the onItemClick behavior
-            val boolPokemon = lazyPagingItems[index]!!
-            PokemonRow(pokemon = boolPokemon) {
-                pokemonViewModel.setPokemon(boolPokemon)
+            val boolArtwork = lazyPagingItems[index]!!
+            ArtworkRow(artwork = boolArtwork){
+                artViewModel.setArtwork(boolArtwork)
                 navController.navigate(route=Screen.Detail.route)
 
             }
+
+//            PokemonRow(pokemon = boolPokemon) {
+//                pokemonViewModel.setPokemon(boolPokemon)
+//                navController.navigate(route=Screen.Detail.route)
+//
+//            }
 
 //            BookRow(book = boolItem) {
 //                //the following lines define the onItemClick behavior
@@ -69,6 +76,7 @@ fun PokemonList(pokemonViewModel: PokemonViewModel, navController: NavController
         }
     }
 }
+
 @Composable
 fun Spinner() {
     Box(
@@ -85,3 +93,4 @@ fun Spinner() {
         )
     }
 }
+
