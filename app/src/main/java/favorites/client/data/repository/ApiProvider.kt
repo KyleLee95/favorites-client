@@ -40,13 +40,23 @@ object ApiProvider {
             .create(PokemonServiceApi::class.java)
     }
 
-    fun loggingSApi(): LoggingServiceApi{
+    fun loggingApi(): LoggingServiceApi{
         return Retrofit.Builder()
             .baseUrl(Constants.loggingServiceBaseUrl)
             .client(getOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LoggingServiceApi::class.java)
+    }
+
+
+    fun artApi(): ArtServiceApi{
+        return Retrofit.Builder()
+            .baseUrl(Constants.artApiServiceBaseUrl)
+            .client(getOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ArtServiceApi::class.java)
     }
 
     private val authHeadersInterceptor = AuthInterceptor()

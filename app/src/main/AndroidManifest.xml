@@ -12,9 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ClientTheme"
         tools:targetApi="31">
-        <!-- Add your API key here -->
         <activity
-            android:name=".client.MainActivity"
+            android:name="favorites.client.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.ClientTheme">
             <intent-filter>

@@ -16,7 +16,9 @@ class PokemonSource(
 
         return try {
             // Fetch Pokémon list from the repository
-            val response = pokemonRepository.getPokemon(position, params.loadSize)
+            val response = pokemonRepository.getPokemon(
+                limit=paginateData.limit, offset=paginateData.offset
+            )
             val pokemonList = response.body()
 
             // Extract the list of results (individual Pokémon items)

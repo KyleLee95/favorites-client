@@ -1,6 +1,5 @@
-package favorites.client.presentation.screens
+package favorites.client.presentation.screens.search
 
-//import BusinessList
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,9 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import favorites.client.presentation.screens.search.paging.PokemonList
 import favorites.client.presentation.screens.search.paging.SearchOperation
-import favorites.client.presentation.viewmodels.BusinessViewModel
-import favorites.client.presentation.viewmodels.PokemonViewModel
 
 
 @Composable
@@ -88,7 +86,7 @@ fun SearchScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Search Businesses",
+                        text = "Search Pokemon",
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(color = Color.Black, fontWeight = FontWeight.Bold),
                         textAlign = TextAlign.Center,
@@ -133,12 +131,8 @@ fun SearchScreen(
                         )
                     }
                 }
-
                 SearchOperation.DONE -> {
-//                    BusinessList(
-//                        businessViewModel = businessViewModel,
-//                        navController = navController
-//                    )
+                    PokemonList(pokemonViewModel = pokemonViewModel, navController = navController)
                 }
 
                 else -> {

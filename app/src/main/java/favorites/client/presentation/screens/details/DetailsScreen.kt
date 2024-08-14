@@ -47,11 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.maps.model.LatLng
-import com.skydoves.landscapist.glide.GlideImage
+//import com.skydoves.landscapist.glide.GlideImage
 import favorites.client.common.Constants
-import favorites.client.presentation.viewmodels.BusinessViewModel
-import favorites.client.presentation.viewmodels.PokemonViewModel
 import favorites.ui.theme.ErrorRed
 import favorites.ui.theme.SuccessGreen
 
