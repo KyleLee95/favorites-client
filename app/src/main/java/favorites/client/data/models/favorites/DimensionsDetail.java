@@ -1,16 +1,15 @@
 
-package favorites.client.data.models;
+package favorites.client.data.models.favorites;
 
-//import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-//@Generated("jsonschema2pojo")
+
 public class DimensionsDetail {
 
     @SerializedName("depth")
     @Expose
-    private Integer depth;
+    private Object depth;
     @SerializedName("diameter")
     @Expose
     private Object diameter;
@@ -19,16 +18,16 @@ public class DimensionsDetail {
     private Integer width;
     @SerializedName("clarification")
     @Expose
-    private String clarification;
+    private Object clarification;
     @SerializedName("height")
     @Expose
     private Integer height;
 
-    public Integer getDepth() {
+    public Object getDepth() {
         return depth;
     }
 
-    public void setDepth(Integer depth) {
+    public void setDepth(Object depth) {
         this.depth = depth;
     }
 
@@ -48,11 +47,11 @@ public class DimensionsDetail {
         this.width = width;
     }
 
-    public String getClarification() {
+    public Object getClarification() {
         return clarification;
     }
 
-    public void setClarification(String clarification) {
+    public void setClarification(Object clarification) {
         this.clarification = clarification;
     }
 

@@ -1,7 +1,5 @@
 package favorites.client.data.repository
-import retrofit2.Response
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 
 interface LoggingServiceApi {

@@ -2,7 +2,7 @@ package favorites.client.presentation.screens.search.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import favorites.client.data.models.Datum
+import favorites.client.data.models.artworks.Datum
 import favorites.client.data.repository.ArtRepository
 
 class ArtSource (

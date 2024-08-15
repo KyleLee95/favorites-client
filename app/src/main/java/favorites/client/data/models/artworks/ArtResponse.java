@@ -1,4 +1,4 @@
-package favorites.client.data.models;
+package favorites.client.data.models.artworks;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -12,10 +12,10 @@ public class ArtResponse {
     private Object preference;
     @SerializedName("pagination")
     @Expose
-    private favorites.client.data.models.Pagination pagination;
+    private favorites.client.data.models.artworks.Pagination pagination;
     @SerializedName("data")
     @Expose
-    private List<favorites.client.data.models.Datum> data;
+    private List<favorites.client.data.models.artworks.Datum> data;
     @SerializedName("info")
     @Expose
     private Info info;
@@ -31,19 +31,19 @@ public class ArtResponse {
         this.preference = preference;
     }
 
-    public favorites.client.data.models.Pagination getPagination() {
+    public favorites.client.data.models.artworks.Pagination getPagination() {
         return pagination;
     }
 
-    public void setPagination(favorites.client.data.models.Pagination pagination) {
+    public void setPagination(favorites.client.data.models.artworks.Pagination pagination) {
         this.pagination = pagination;
     }
 
-    public List<favorites.client.data.models.Datum> getData() {
+    public List<favorites.client.data.models.artworks.Datum> getData() {
         return data;
     }
 
-    public void setData(List<favorites.client.data.models.Datum> data) {
+    public void setData(List<favorites.client.data.models.artworks.Datum> data) {
         this.data = data;
     }
 

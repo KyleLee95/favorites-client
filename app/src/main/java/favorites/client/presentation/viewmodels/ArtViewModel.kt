@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import favorites.client.common.Constants
-import favorites.client.data.models.ArtResponse
-import favorites.client.data.models.Datum
+import favorites.client.data.models.artworks.Datum
 import favorites.client.data.repository.ApiProvider
 import favorites.client.data.repository.ArtRepository
 import favorites.client.presentation.screens.search.paging.ArtSource
@@ -19,8 +17,6 @@ import favorites.client.presentation.screens.search.paging.Paginate
 import favorites.client.presentation.screens.search.paging.SearchOperation
 import favorites.client.presentation.screens.search.paging.SearchState
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.Flow
-
 
 
 class ArtViewModel: ViewModel() {
@@ -34,7 +30,6 @@ class ArtViewModel: ViewModel() {
 
     private var _artwork = mutableStateOf(Constants.fakeArtwork)
     val artwork: State<Datum> = _artwork
-
     fun setArtwork(artwork: Datum) {
         _artwork.value = artwork
     }

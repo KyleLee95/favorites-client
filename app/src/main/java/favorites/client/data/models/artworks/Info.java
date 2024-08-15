@@ -1,5 +1,5 @@
 
-package favorites.client.data.models;
+package favorites.client.data.models.artworks;
 
 import java.util.List;
 //import javax.annotation.Generated;

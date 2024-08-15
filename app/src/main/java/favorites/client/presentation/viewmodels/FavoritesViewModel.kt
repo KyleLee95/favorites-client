@@ -1,7 +1,6 @@
 package favorites.client.presentation.viewmodels
 
 import favorites.client.data.repository.FavoritesRepository
-import favorites.client.presentation.screens.search.paging.ArtSource
 
 
 import androidx.compose.runtime.State
@@ -10,20 +9,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import favorites.client.common.Constants
-import favorites.client.data.models.ArtResponse
-import favorites.client.data.models.Datum
+import favorites.client.data.models.favorites.Favorite
 import favorites.client.data.repository.ApiProvider
 import favorites.client.presentation.screens.search.paging.FavoritesSource
-import favorites.client.presentation.screens.search.paging.Paginate
-//import favorites.client.presentation.screens.search.paging.PokemonSource
 import favorites.client.presentation.screens.search.paging.SearchOperation
-import favorites.client.presentation.screens.search.paging.SearchState
+import favorites.client.presentation.screens.search.paging.FavoritesSearchState
+import favorites.client.presentation.screens.search.paging.PaginateFavorites
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.Flow
-
 
 
 class FavoritesViewModel: ViewModel() {
@@ -67,29 +61,30 @@ class FavoritesViewModel: ViewModel() {
         _queryText.value = query
     }
 
-    private var _favorite = mutableStateOf(Constants.fakeArtwork)
-    val favorite: State<Datum> = _favorite
+    private var _favorite = mutableStateOf(Constants.fakeFavorite)
+    val favorite: State<Favorite> = _favorite
 
-    fun setFavorite(favorite: Datum) {
-        _favorite.value = favorite
+    fun setFavorite(favorite: Favorite) {
+        _favorite.value= favorite
     }
 
-    private var _searchState = mutableStateOf(SearchState())
-    val searchState: State<SearchState> = _searchState
+    private var _searchState = mutableStateOf(FavoritesSearchState())
+    val searchState: State<FavoritesSearchState> = _searchState
 
     private var currentPage = 1
 
     fun onSearch() {
         currentPage = 1
-        _searchState.value = SearchState(searchOperation = SearchOperation.LOADING)
+        _searchState.value = FavoritesSearchState(searchOperation = SearchOperation.LOADING)
         viewModelScope.launch {
-            _searchState.value = SearchState(
+            _searchState.value = FavoritesSearchState(
                 data = Pager(
                     config = PagingConfig(pageSize = 10, prefetchDistance = 5),
                     pagingSourceFactory = {
                         FavoritesSource(
                             favoritesRepository= favoritesRepository,
-                            paginateData =  Paginate(
+                            paginateData =  PaginateFavorites(
+                                page = currentPage
                             )
                         )
                     }

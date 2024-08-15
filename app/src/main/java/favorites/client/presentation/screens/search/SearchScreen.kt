@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import favorites.client.presentation.components.CustomBottomNavigationBar
 import favorites.client.presentation.screens.search.paging.ArtList
 import favorites.client.presentation.screens.search.paging.SearchOperation
 import favorites.client.presentation.viewmodels.ArtViewModel
@@ -98,6 +99,9 @@ fun SearchScreen(
 
             )
         },
+        bottomBar = {
+            CustomBottomNavigationBar(navController = navController)
+        }
     ) { paddingValues: PaddingValues ->
         Column(
             modifier = Modifier

@@ -1,6 +1,6 @@
 package favorites.client.data.repository
 
-import favorites.client.data.models.ArtResponse
+import favorites.client.data.models.artworks.ArtResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response

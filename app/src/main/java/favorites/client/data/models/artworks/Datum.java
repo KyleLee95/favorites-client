@@ -1,11 +1,10 @@
 
-package favorites.client.data.models;
+package favorites.client.data.models.artworks;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import favorites.client.data.models.DimensionsDetail;
 
 //@Generated("jsonschema2pojo")
 public class Datum {
@@ -15,7 +14,7 @@ public class Datum {
     private Double score;
     @SerializedName("dimensions_detail")
     @Expose
-    private List<DimensionsDetail> dimensionsDetail;
+    private List<favorites.client.data.models.artworks.DimensionsDetail> dimensionsDetail;
     @SerializedName("medium_display")
     @Expose
     private String mediumDisplay;
@@ -64,11 +63,11 @@ public class Datum {
         this.score = score;
     }
 
-    public List<DimensionsDetail> getDimensionsDetail() {
+    public List<favorites.client.data.models.artworks.DimensionsDetail> getDimensionsDetail() {
         return dimensionsDetail;
     }
 
-    public void setDimensionsDetail(List<DimensionsDetail> dimensionsDetail) {
+    public void setDimensionsDetail(List<favorites.client.data.models.artworks.DimensionsDetail> dimensionsDetail) {
         this.dimensionsDetail = dimensionsDetail;
     }
 
