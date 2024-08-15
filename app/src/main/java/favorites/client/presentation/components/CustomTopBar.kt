@@ -58,7 +58,6 @@ fun CustomTopBar(titleText: String,  navController: NavController, amplifyServic
                         MainScope().launch {
                             navigateAndPop(navController, Screen.Login.route)
                         }
-
                     }
 
                 }) {

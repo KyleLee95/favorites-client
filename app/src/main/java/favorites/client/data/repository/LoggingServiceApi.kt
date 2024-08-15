@@ -1,23 +1,11 @@
 package favorites.client.data.repository
+import favorites.client.data.models.logging.LogEvent
+import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.Response
 
-
+// Define your Retrofit API service
 interface LoggingServiceApi {
-
-    @POST(value = "/")
-    suspend fun postEventToLog(
-//        @Query()
-    )
+    @POST("logs")
+    suspend fun logEvent(@Body logEvent: LogEvent): Response<LogEvent>
 }
-
-
-
-//interface FavoritesServiceApi {
-//    @GET(value = "/businesses/search")
-//    suspend fun getBusinesses(
-//        @Query("term") term: String,
-//        @Query("location") location: String,
-//        @Query("limit") limit: Int,
-//        @Query("offset") offset: Int,
-//    ): Response<>
-//}
