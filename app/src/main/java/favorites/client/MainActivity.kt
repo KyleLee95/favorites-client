@@ -16,6 +16,7 @@ import favorites.client.auth.AmplifyService
 import favorites.client.presentation.navigation.Navigation
 import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.client.presentation.viewmodels.FavoritesViewModel
+import favorites.client.presentation.viewmodels.SamMailerViewModel
 import favorites.client.observers.EventObserver
 import favorites.ui.theme.ClientTheme
 
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         amplifyService.configureAmplify(this)
 
-        val eventObserver = EventObserver(sessionEmail = "test@test.com" )
+        val eventObserver = EventObserver(sessionEmail="kchow1@uchicago.edu")
         ProcessLifecycleOwner.get().lifecycle.addObserver(eventObserver)
 
 
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
                     Navigation(
                         artViewModel = ArtViewModel(),
                         favoritesViewModel = FavoritesViewModel(),
+                        samMailerViewModel = SamMailerViewModel(),
                         amplifyService = amplifyService,
                         navController = navController,
                         eventObserver = eventObserver

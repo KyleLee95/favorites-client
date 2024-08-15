@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 class FavoritesViewModel: ViewModel() {
     private val favoritesRepository: FavoritesRepository = FavoritesRepository(ApiProvider.favoritesApi())
 
+
     // AUTH //
 
     private var _username = mutableStateOf("")
@@ -52,6 +53,21 @@ class FavoritesViewModel: ViewModel() {
         _code.value = text
     }
 
+    // Loading and Error State
+    private var _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+    fun setLoading(loading:Boolean){
+        _isLoading.value = loading
+    }
+
+    private var _errorMessage = mutableStateOf<String?>(null)
+    val errorMessage: State<String?> = _errorMessage
+    fun setErrorMessage(message:String?){
+        _errorMessage.value = message
+
+    }
+
+
     // FAVORITES //
 
 
@@ -71,26 +87,33 @@ class FavoritesViewModel: ViewModel() {
     private var _searchState = mutableStateOf(FavoritesSearchState())
     val searchState: State<FavoritesSearchState> = _searchState
 
+
     private var currentPage = 1
 
     fun onSearch() {
         currentPage = 1
         _searchState.value = FavoritesSearchState(searchOperation = SearchOperation.LOADING)
         viewModelScope.launch {
-            _searchState.value = FavoritesSearchState(
-                data = Pager(
-                    config = PagingConfig(pageSize = 10, prefetchDistance = 5),
-                    pagingSourceFactory = {
-                        FavoritesSource(
-                            favoritesRepository= favoritesRepository,
-                            paginateData =  PaginateFavorites(
-                                page = currentPage
+            try {
+                _searchState.value = FavoritesSearchState(
+                    data = Pager(
+                        config = PagingConfig(pageSize = 10, prefetchDistance = 5),
+                        pagingSourceFactory = {
+                            FavoritesSource(
+                                favoritesRepository = favoritesRepository,
+                                paginateData = PaginateFavorites(
+                                    page = currentPage
+                                )
                             )
-                        )
-                    }
-                ).flow.cachedIn(viewModelScope),
-                searchOperation = SearchOperation.DONE
-            )
+                        }
+                    ).flow.cachedIn(viewModelScope),
+                    searchOperation = SearchOperation.DONE
+                )
+            }catch(e:Exception){
+                _errorMessage.value = "An error occurred while fetching favorites: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }

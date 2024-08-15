@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import favorites.R
 import favorites.client.auth.AmplifyService
 import favorites.client.common.Constants
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.navigation.Screen
 import favorites.client.presentation.screens.auth.navigateAndPop
 import kotlinx.coroutines.MainScope
@@ -33,7 +34,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTopBar(titleText: String,  navController: NavController, amplifyService: AmplifyService) {
+fun CustomTopBar(titleText: String,  navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
     val context = LocalContext.current
 
     TopAppBar(
@@ -56,7 +57,7 @@ fun CustomTopBar(titleText: String,  navController: NavController, amplifyServic
                 onClick = {
                     amplifyService.logOut {
                         MainScope().launch {
-                            navigateAndPop(navController, Screen.Login.route)
+                            navigateAndPop(navController, Screen.Login.route, eventObserver = eventObserver)
                         }
                     }
 

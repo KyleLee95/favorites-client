@@ -11,8 +11,5 @@ class LoggingServiceRepository (private val loggingServiceApi: LoggingServiceApi
         return withContext(Dispatchers.IO){
             loggingServiceApi.logEvent(logEvent)
         }
-
-
-
     }
 }

@@ -18,14 +18,16 @@ import favorites.client.presentation.screens.details.DetailsScreen
 import favorites.client.presentation.screens.favorites.FavoritesScreen
 import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.client.presentation.viewmodels.FavoritesViewModel
+import favorites.client.presentation.viewmodels.SamMailerViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController,
     favoritesViewModel: FavoritesViewModel,
     artViewModel: ArtViewModel,
+    samMailerViewModel: SamMailerViewModel,
     eventObserver: EventObserver,
-    amplifyService: AmplifyService
+    amplifyService: AmplifyService,
 ) {
 
     //set start screen conditionally
@@ -38,7 +40,7 @@ fun Navigation(
     NavHost(navController, startDestination = startDestination) {
 
         composable(Screen.Login.route) {
-            LoginScreen(viewModel=favoritesViewModel, navController = navController, amplifyService = amplifyService)
+            LoginScreen(viewModel=favoritesViewModel, navController = navController, amplifyService = amplifyService, eventObserver=eventObserver)
         }
 
         composable(Screen.Search.route) {
@@ -70,7 +72,9 @@ fun Navigation(
             ContactScreen(
                 navController = navController,
                 amplifyService=amplifyService,
-                eventObserver = eventObserver
+                eventObserver = eventObserver,
+                favoritesViewModel = favoritesViewModel,
+                samMailerViewModel = samMailerViewModel
                 )
         }
 

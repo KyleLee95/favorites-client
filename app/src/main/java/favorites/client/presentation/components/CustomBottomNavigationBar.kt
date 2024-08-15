@@ -11,10 +11,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.navigation.Screen
 
 @Composable
-fun CustomBottomNavigationBar(navController: NavController) {
+fun CustomBottomNavigationBar(navController: NavController, eventObserver: EventObserver) {
     val tabs = listOf(
         Screen.Search,
         Screen.Favorites,
@@ -43,6 +44,7 @@ fun CustomBottomNavigationBar(navController: NavController) {
                         // avoid building up a large stack of destinations
                         // on the back stack as users select items
                         navController.graph.startDestinationRoute?.let { route ->
+                            eventObserver.logUserEvent(event="navigate-$route")
                             popUpTo(route) {
                                 saveState = true
                             }

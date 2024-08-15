@@ -27,9 +27,10 @@ import favorites.client.presentation.components.CustomTopBar
 fun FavoritesScreen(navController: NavController, amplifyService: AmplifyService, favoritesViewModel: FavoritesViewModel, eventObserver: EventObserver) {
     Scaffold(
         modifier = Constants.modifier,
-        bottomBar = { CustomBottomNavigationBar(navController) },
+        bottomBar = { CustomBottomNavigationBar(navController, eventObserver) },
         topBar = {
-            CustomTopBar(titleText = "Favorites",navController=navController, amplifyService=amplifyService)
+            CustomTopBar(titleText = "Favorites",navController=navController, amplifyService=amplifyService, eventObserver=eventObserver)
+
         }
     ) {paddingValues ->
         Column(

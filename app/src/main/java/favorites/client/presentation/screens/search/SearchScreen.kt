@@ -102,7 +102,7 @@ fun SearchScreen(
             )
         },
         bottomBar = {
-            CustomBottomNavigationBar(navController = navController)
+            CustomBottomNavigationBar(navController = navController, eventObserver=eventObserver)
         }
     ) { paddingValues: PaddingValues ->
         Column(

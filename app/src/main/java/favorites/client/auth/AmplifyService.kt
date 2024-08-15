@@ -12,7 +12,6 @@ import com.amplifyframework.core.Amplify
 
 
 class AmplifyService  {
-
     fun configureAmplify(context: Context) {
         try {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
@@ -64,11 +63,17 @@ class AmplifyService  {
         )
     }
 
-    fun login(username: String, password: String, onComplete: () -> Unit) {
+    fun login(username: String, password: String, onComplete: (Boolean) -> Unit) {
         Amplify.Auth.signIn(
             username,
             password,
-            { onComplete() },
+            { result->
+                if(result.isSignInComplete){
+                    onComplete(true)
+                }else{
+                    onComplete(false)
+                }
+            },
             { Log.e("ampy", "Login Error:", it) }
         )
     }

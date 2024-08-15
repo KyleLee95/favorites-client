@@ -3,10 +3,12 @@ package favorites.client.presentation.screens.auth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -73,13 +75,16 @@ fun SignUpScreen(viewModel: FavoritesViewModel, navController: NavController, am
 }
 @Composable
 fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
-
-
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
+        if(isLoading){
+            CircularProgressIndicator()
+        }
         TextField(
             value = viewModel.username.value,
             onValueChange = { viewModel.setUsername(it) },
@@ -94,22 +99,26 @@ fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amp
             placeholder = { Text(text = "Password") }
         )
 
-        Button(onClick =   {
+        if(errorMessage != null){
+            Text(
+                text = errorMessage ?: "",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
 
-            amplifyService.login(viewModel.username.value, viewModel.password.value){
+        Button(onClick = {
+            amplifyService.login(viewModel.username.value, viewModel.password.value) {
                 //this method will log the user's email address to Logcat. Filter for ampy
                 amplifyService.fetchEmailAndLog()
                 MainScope().launch {
-                    navigateAndPop(navController, Screen.Search.route, eventObserver = eventObserver)
+                    navigateAndPop(navController, Screen.Search.route, eventObserver)
                 }
-
             }
-
         }
-
-        ) {
-            Text(text = "Login")
-        }
+            ) {
+                Text(text = "Login")
+            }
 
         TextButton(onClick = {
             MainScope().launch {
@@ -136,7 +145,8 @@ fun VerifyScreen(viewModel: FavoritesViewModel, navController: NavController, am
         )
 
         Button(onClick = {
-
+            viewModel.setLoading(true)
+            viewModel.setErrorMessage(null)
             amplifyService.verifyCode(viewModel.username.value, viewModel.code.value){
                 MainScope().launch {
                     navigateAndPop(navController, Screen.Login.route, eventObserver)

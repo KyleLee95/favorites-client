@@ -21,6 +21,16 @@ class AuthInterceptor() : Interceptor {
 
 
 object ApiProvider {
+    fun samMailerAPi(): SamMailerApi{
+        return Retrofit.Builder()
+            .baseUrl(Constants.samMailerBaseUrl)
+            .client(getOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(SamMailerApi::class.java)
+    }
+
+
     fun favoritesApi(): FavoritesServiceApi {
         return Retrofit.Builder()
             .baseUrl(Constants.favoritesServiceBaseUrl)
