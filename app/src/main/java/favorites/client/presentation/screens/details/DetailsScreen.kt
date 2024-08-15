@@ -48,6 +48,7 @@ import favorites.client.common.Constants
 import favorites.client.common.Constants.modifier
 import favorites.client.observers.EventObserver
 import favorites.client.presentation.viewmodels.ArtViewModel
+import favorites.client.presentation.viewmodels.AuthViewModel
 import favorites.ui.theme.SuccessGreen
 
 
@@ -254,5 +255,6 @@ fun DetailsScreen(
 @Preview
 fun DetailsPreview() {
     val artViewModel = ArtViewModel()
-    DetailsScreen(artViewModel=artViewModel, navController = rememberNavController(), eventObserver = EventObserver(sessionEmail = "test@email.com"))
+    val authViewModel = AuthViewModel()
+    DetailsScreen(artViewModel=artViewModel, navController = rememberNavController(), eventObserver = EventObserver(authViewModel=authViewModel))
 }

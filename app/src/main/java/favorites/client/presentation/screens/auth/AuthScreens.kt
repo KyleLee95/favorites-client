@@ -1,6 +1,7 @@
 package favorites.client.presentation.screens.auth
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,120 +20,193 @@ import androidx.navigation.NavController
 import favorites.client.auth.AmplifyService
 import favorites.client.observers.EventObserver
 import favorites.client.presentation.navigation.Screen
+import favorites.client.presentation.viewmodels.AuthState
+import favorites.client.presentation.viewmodels.AuthViewModel
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun SignUpScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
+fun SignUpScreen(viewModel: AuthViewModel, navController: NavController, eventObserver: EventObserver) {
+    val authState by viewModel.authState
 
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TextField(
-            value = viewModel.username.value,
-            onValueChange = { viewModel.setUsername(it) },
-            placeholder = { Text(text = "Username") }
-        )
-
-        TextField(
-            value = viewModel.email.value,
-            onValueChange = { viewModel.setEmail(it)},
-            placeholder = { Text(text = "Email") }
-        )
-
-        TextField(
-            value = viewModel.password.value,
-            onValueChange = { viewModel.setPassword(it) },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            placeholder = { Text(text = "Password") }
-        )
-
-
-        Button(onClick = {
-            amplifyService.signUp(viewModel.username.value, viewModel.email.value, viewModel.password.value){
-                MainScope().launch {
-                    navigateAndPop(navController, Screen.Verify.route, eventObserver =eventObserver )
-                }
-
-            }
-
-
-        }) {
-            Text(text = "Sign Up")
-        }
-
-        TextButton(onClick = {
-            MainScope().launch {
-                navigateAndPop(navController, Screen.Login.route, eventObserver=eventObserver)}}) {
-            Text(text = "Already have an account? Login.")
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) {
+            navigateAndPop(navController, Screen.Verify.route, eventObserver)
+        } else if (authState is AuthState.Error) {
+            // Handle error by showing an error message (e.g., snack bar)
+             viewModel.setErrorMessage((authState as AuthState.Error).message)
         }
     }
-}
-@Composable
-fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
-    val isLoading by viewModel.isLoading
-    val errorMessage by viewModel.errorMessage
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
-    ) {
-        if(isLoading){
+    ){
+
+        when (authState) {
+
+            is AuthState.Loading -> {
+                CircularProgressIndicator()
+            }
+            is AuthState.Error -> {
+                Text(
+                    text = (authState as AuthState.Error).message,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+            else -> {
+                // Default UI
+            }
+        }
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            TextField(
+                value = viewModel.username.value,
+                onValueChange = { viewModel.setUsername(it) },
+                placeholder = { Text(text = "Username") }
+            )
+
+            TextField(
+                value = viewModel.email.value,
+                onValueChange = { viewModel.setEmail(it) },
+                placeholder = { Text(text = "Email") }
+            )
+
+            TextField(
+                value = viewModel.password.value,
+                onValueChange = { viewModel.setPassword(it) },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                placeholder = { Text(text = "Password") }
+            )
+
+            Button(onClick = { viewModel.signUp() }) {
+                Text(text = "Sign Up")
+            }
+
+            TextButton(onClick = {
+                MainScope().launch {
+                    navigateAndPop(navController, Screen.Login.route, eventObserver = eventObserver)
+                }
+            }) {
+                Text(text = "Already have an account? Login.")
+            }
+        }
+
+    }
+
+}
+
+@Composable
+fun LoginScreen(viewModel: AuthViewModel, navController: NavController, eventObserver: EventObserver) {
+    val authState by viewModel.authState
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) {
+            navigateAndPop(navController, Screen.Search.route, eventObserver)
+        } else if (authState is AuthState.Error) {
+            // Handle error by showing an error message (e.g., snack bar)
+             viewModel.setErrorMessage((authState as AuthState.Error).message)
+        }
+    }
+    when (authState) {
+        is AuthState.Loading -> {
             CircularProgressIndicator()
         }
-        TextField(
-            value = viewModel.username.value,
-            onValueChange = { viewModel.setUsername(it) },
-            placeholder = { Text(text = "Username") }
-        )
 
-        TextField(
-            value = viewModel.password.value,
-            onValueChange = { viewModel.setPassword(it)  },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            placeholder = { Text(text = "Password") }
-        )
 
-        if(errorMessage != null){
+
+        is AuthState.Error -> {
             Text(
-                text = errorMessage ?: "",
+                text = (authState as AuthState.Error).message,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(8.dp)
             )
         }
 
-        Button(onClick = {
-            amplifyService.login(viewModel.username.value, viewModel.password.value) {
-                //this method will log the user's email address to Logcat. Filter for ampy
-                amplifyService.fetchEmailAndLog()
-                MainScope().launch {
-                    navigateAndPop(navController, Screen.Search.route, eventObserver)
-                }
-            }
+        else -> {
         }
-            ) {
-                Text(text = "Login")
-            }
+    }
 
-        TextButton(onClick = {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+                TextField(
+                value = viewModel.username.value,
+        onValueChange = { viewModel.setUsername(it) },
+        placeholder = { Text(text = "Username") }
+            )
+
+            TextField(
+                value = viewModel.password.value,
+                onValueChange = { viewModel.setPassword(it)  },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                placeholder = { Text(text = "Password") }
+            )
+
+        Button(onClick = {
+            viewModel.login()
+        }
+        ) {
+            Text(text = "Login")
+        }
+
+                TextButton(onClick = {
             MainScope().launch {
                 navigateAndPop(navController, Screen.SignUp.route, eventObserver=eventObserver)} }
 
-        ) {
+                ) {
             Text(text = "Don't have an account? Sign up.")
         }
     }
-}
-@Composable
-fun VerifyScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
+    }
 
+
+
+
+
+
+@Composable
+fun VerifyScreen(viewModel: AuthViewModel, navController: NavController, eventObserver: EventObserver) {
+    val authState by viewModel.authState
+    // Handle navigation when the auth state is successful
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) {
+            navigateAndPop(navController, Screen.Login.route, eventObserver)
+            eventObserver.logUserEvent(event = "verify-${viewModel.username.value}")
+        } else if (authState is AuthState.Error) {
+            // Handle error by showing an error message (e.g., snack bar)
+             viewModel.setErrorMessage((authState as AuthState.Error).message)
+        }
+    }
+
+    when (authState) {
+        is AuthState.Loading -> {
+            CircularProgressIndicator()
+        }
+
+        is AuthState.Error -> {
+            Text(
+                text = (authState as AuthState.Error).message,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+        else -> {
+            // Default UI
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
@@ -144,16 +219,7 @@ fun VerifyScreen(viewModel: FavoritesViewModel, navController: NavController, am
             placeholder = { Text(text = "Verification Code") }
         )
 
-        Button(onClick = {
-            viewModel.setLoading(true)
-            viewModel.setErrorMessage(null)
-            amplifyService.verifyCode(viewModel.username.value, viewModel.code.value){
-                MainScope().launch {
-                    navigateAndPop(navController, Screen.Login.route, eventObserver)
-                }
-                eventObserver.logUserEvent(event="verify-${viewModel.username.value}")
-            }
-        }) {
+        Button(onClick = { viewModel.verifyCode() }) {
             Text(text = "Verify")
         }
     }

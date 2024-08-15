@@ -14,7 +14,7 @@ import favorites.client.data.models.favorites.Favorite
 object Constants {
     val modifier = Modifier.padding(paddingValues = PaddingValues(all = 0.dp))
     val favoritesServiceBaseUrl = "http://localhost:8000/favorites/" //change for prod
-    val loggingServiceBaseUrl = " https://2aa2-70-107-215-6.ngrok-free.app/"
+    val loggingServiceBaseUrl = "https://2aa2-70-107-215-6.ngrok-free.app/"
     val artApiServiceBaseUrl = "https://d7ce-70-107-215-6.ngrok-free.app/" // Route our outbound API calls through our own backend.
     val samMailerBaseUrl =  "https://an9qng3mw0.execute-api.us-east-1.amazonaws.com/Prod/"
     var authenticate = true

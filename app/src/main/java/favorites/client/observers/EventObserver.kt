@@ -6,12 +6,14 @@ import androidx.lifecycle.LifecycleOwner
 import favorites.client.data.models.logging.LogEvent
 import favorites.client.data.repository.ApiProvider
 import favorites.client.data.repository.LoggingServiceRepository
+import favorites.client.presentation.viewmodels.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class EventObserver(private val sessionEmail: String) : DefaultLifecycleObserver {
+class EventObserver(private val authViewModel: AuthViewModel) : DefaultLifecycleObserver {
     private val loggingRepository: LoggingServiceRepository= LoggingServiceRepository(ApiProvider.loggingApi())
+
 
     override fun onCreate(owner: LifecycleOwner) {
         Log.i("event", "onCreate")
@@ -46,7 +48,7 @@ class EventObserver(private val sessionEmail: String) : DefaultLifecycleObserver
     }
 
     private fun logEvent(event: String) {
-        val logEvent = LogEvent(sessionEmail, event, System.currentTimeMillis() / 1000)
+        val logEvent = LogEvent(sessionEmail = authViewModel.email.value, event, System.currentTimeMillis() / 1000)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 loggingRepository.logEvent(logEvent)

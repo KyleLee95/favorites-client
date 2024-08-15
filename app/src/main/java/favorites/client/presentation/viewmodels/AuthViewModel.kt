@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import favorites.client.auth.AmplifyService
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val amplifyService: AmplifyService) : ViewModel() {
+class AuthViewModel() : ViewModel() {
+    private val amplifyService = AmplifyService()
 
     private val _username = mutableStateOf("")
     val username: State<String> = _username
@@ -21,6 +22,9 @@ class AuthViewModel(private val amplifyService: AmplifyService) : ViewModel() {
     private val _authState = mutableStateOf<AuthState>(AuthState.Idle)
     val authState: State<AuthState> = _authState
 
+    private val _code = mutableStateOf("")
+    val code: State<String> = _code
+
     fun setUsername(value: String) {
         _username.value = value
     }
@@ -33,12 +37,33 @@ class AuthViewModel(private val amplifyService: AmplifyService) : ViewModel() {
         _password.value = value
     }
 
-    fun login() {
+    fun setCode(value: String) {
+        _code.value = value
+    }
+
+    fun verifyCode() {
         _authState.value = AuthState.Loading
-        amplifyService.login(_username.value, _password.value) {
-            viewModelScope.launch {
-                amplifyService.fetchEmailAndLog() // Optionally update email state here
-                _authState.value = AuthState.Success
+        amplifyService.verifyCode(_username.value, _code.value) {
+            _authState.value = AuthState.Success
+        }
+    }
+    fun setAuthState(value: AuthState){
+        _authState.value = value
+
+    }
+
+    fun login() {
+        setAuthState(AuthState.Loading)
+        amplifyService.login(_username.value, _password.value) { isSuccess, errorMessage ->
+            if (isSuccess) {
+                viewModelScope.launch {
+                    amplifyService.fetchEmailAndLog(onEmailFetched = {
+                        setEmail(it)
+                        setAuthState(AuthState.Success)
+                    })
+                }
+            } else {
+                setAuthState(AuthState.Error(errorMessage ?: "Login failed. Please check your credentials."))
             }
         }
     }
@@ -53,6 +78,12 @@ class AuthViewModel(private val amplifyService: AmplifyService) : ViewModel() {
     fun logOut() {
         amplifyService.logOut {
             _authState.value = AuthState.Idle
+        }
+    }
+
+    fun setErrorMessage(message: String?) {
+        if (message != null) {
+            _authState.value = AuthState.Error(message)
         }
     }
 }

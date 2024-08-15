@@ -18,6 +18,7 @@ import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import favorites.client.presentation.viewmodels.SamMailerViewModel
 import favorites.client.observers.EventObserver
+import favorites.client.presentation.viewmodels.AuthViewModel
 import favorites.ui.theme.ClientTheme
 
 
@@ -27,9 +28,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         amplifyService.configureAmplify(this)
 
-        val eventObserver = EventObserver(sessionEmail=FavoritesViewModel().email.value)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(eventObserver)
 
+        val authViewModel = AuthViewModel()
+
+        // Fetch the session email after login and update the AuthViewModel
+        amplifyService.fetchEmailAndLog { sessionEmail ->
+            authViewModel.setEmail(sessionEmail)
+        }
+
+        // Pass the updated session email to the EventObserver
+        val eventObserver = EventObserver(authViewModel= authViewModel)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(eventObserver)
 
         setContent {
             ClientTheme {
@@ -44,7 +53,7 @@ class MainActivity : ComponentActivity() {
                         artViewModel = ArtViewModel(),
                         favoritesViewModel = FavoritesViewModel(),
                         samMailerViewModel = SamMailerViewModel(),
-                        amplifyService = amplifyService,
+                        authViewModel = authViewModel,
                         navController = navController,
                         eventObserver = eventObserver
                     )

@@ -28,15 +28,15 @@ import favorites.client.presentation.components.CustomTopBar
 import favorites.client.common.Constants
 import favorites.client.data.models.contact.SamMailerResponse
 import favorites.client.observers.EventObserver
+import favorites.client.presentation.viewmodels.AuthViewModel
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import favorites.client.presentation.viewmodels.SamMailerViewModel
 
 @Composable
 fun ContactScreen(
     navController: NavController,
-    amplifyService: AmplifyService,
     eventObserver: EventObserver,
-    favoritesViewModel: FavoritesViewModel,
+    authViewModel: AuthViewModel,
     samMailerViewModel: SamMailerViewModel
 ) {
     val subjectState = remember { mutableStateOf("") }
@@ -54,7 +54,7 @@ fun ContactScreen(
             CustomTopBar(
                 titleText = "Contact Us",
                 navController = navController,
-                amplifyService = amplifyService,
+                authViewModel = authViewModel,
                 eventObserver = eventObserver
             )
         }

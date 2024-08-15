@@ -2,11 +2,9 @@ package favorites.client.presentation.navigation
 
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.LifecycleObserver
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import favorites.client.auth.AmplifyService
 import favorites.client.common.Constants
 import favorites.client.observers.EventObserver
 import favorites.client.presentation.screens.auth.LoginScreen
@@ -17,6 +15,7 @@ import favorites.client.presentation.screens.search.SearchScreen
 import favorites.client.presentation.screens.details.DetailsScreen
 import favorites.client.presentation.screens.favorites.FavoritesScreen
 import favorites.client.presentation.viewmodels.ArtViewModel
+import favorites.client.presentation.viewmodels.AuthViewModel
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import favorites.client.presentation.viewmodels.SamMailerViewModel
 
@@ -26,8 +25,8 @@ fun Navigation(
     favoritesViewModel: FavoritesViewModel,
     artViewModel: ArtViewModel,
     samMailerViewModel: SamMailerViewModel,
+    authViewModel: AuthViewModel,
     eventObserver: EventObserver,
-    amplifyService: AmplifyService,
 ) {
 
     //set start screen conditionally
@@ -40,7 +39,7 @@ fun Navigation(
     NavHost(navController, startDestination = startDestination) {
 
         composable(Screen.Login.route) {
-            LoginScreen(viewModel=favoritesViewModel, navController = navController, amplifyService = amplifyService, eventObserver=eventObserver)
+            LoginScreen(viewModel= authViewModel, navController = navController, eventObserver=eventObserver)
         }
 
         composable(Screen.Search.route) {
@@ -62,8 +61,8 @@ fun Navigation(
         composable(Screen.Favorites.route) {
             FavoritesScreen(
                 navController = navController,
-                amplifyService=amplifyService,
                 favoritesViewModel = favoritesViewModel,
+                authViewModel = authViewModel,
                 eventObserver= eventObserver
             )
         }
@@ -71,9 +70,8 @@ fun Navigation(
         composable(Screen.Contact.route) {
             ContactScreen(
                 navController = navController,
-                amplifyService=amplifyService,
                 eventObserver = eventObserver,
-                favoritesViewModel = favoritesViewModel,
+                authViewModel = authViewModel,
                 samMailerViewModel = samMailerViewModel
                 )
         }
@@ -81,18 +79,16 @@ fun Navigation(
 
         composable(Screen.SignUp.route){
             SignUpScreen(
-                viewModel = favoritesViewModel,
+                viewModel = authViewModel,
                 navController = navController ,
-                amplifyService = amplifyService,
                 eventObserver = eventObserver
                 )
         }
 
         composable(Screen.Verify.route) {
             VerifyScreen(
-                viewModel = favoritesViewModel,
+                viewModel = authViewModel,
                 navController = navController,
-                amplifyService=amplifyService,
                 eventObserver = eventObserver
                 )
         }

@@ -21,24 +21,18 @@ class AmplifyService  {
             Log.e("ampy", "Amplify configuration failed", e)
         }
     }
-    //this method fetches the sessionEmail. This is the email associated with the current user's authenticated
-    //session. This value may be different from the 'email' prop which is part of the auth-flow and already defined in ViewModel.
-    fun fetchEmailAndLog() {
+
+    fun fetchEmailAndLog(onEmailFetched: (String) -> Unit) {
         Amplify.Auth.fetchUserAttributes(
             { attributes: List<AuthUserAttribute> ->
-                // Use the firstOrNull function to get the session email attribute
                 val emailAttribute = attributes.firstOrNull { it.key == AuthUserAttributeKey.email() }
-                if (emailAttribute != null) {
-                    val sessionEmail = emailAttribute.value
-                    Log.i("ampy", "Session Email: $sessionEmail")
-
-                } else {
-                    Log.i("ampy", "Session Email attribute not found")
-
-                }
+                val sessionEmail = emailAttribute?.value ?: ""
+                Log.i("ampy", "Session Email: $sessionEmail")
+                onEmailFetched(sessionEmail) // Pass the session email back to the caller
             },
             { error: AuthException ->
                 Log.e("ampy", "Failed to fetch user attributes.", error)
+                onEmailFetched("") // Pass an empty string if there's an error
             }
         )
     }
@@ -63,18 +57,21 @@ class AmplifyService  {
         )
     }
 
-    fun login(username: String, password: String, onComplete: (Boolean) -> Unit) {
+    fun login(username: String, password: String, onComplete: (Boolean, String?) -> Unit) {
         Amplify.Auth.signIn(
             username,
             password,
-            { result->
-                if(result.isSignInComplete){
-                    onComplete(true)
-                }else{
-                    onComplete(false)
+            { result ->
+                if (result.isSignInComplete) {
+                    onComplete(true, null)
+                } else {
+                    onComplete(false, "Login not fully completed. Please try again.")
                 }
             },
-            { Log.e("ampy", "Login Error:", it) }
+            { error ->
+                Log.e("ampy", "Login Error:", error)
+                onComplete(false, error.localizedMessage ?: "An unknown error occurred.")
+            }
         )
     }
 

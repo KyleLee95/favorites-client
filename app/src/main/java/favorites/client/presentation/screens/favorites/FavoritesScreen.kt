@@ -22,14 +22,15 @@ import favorites.client.observers.EventObserver
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import favorites.client.presentation.components.CustomBottomNavigationBar
 import favorites.client.presentation.components.CustomTopBar
+import favorites.client.presentation.viewmodels.AuthViewModel
 
 @Composable
-fun FavoritesScreen(navController: NavController, amplifyService: AmplifyService, favoritesViewModel: FavoritesViewModel, eventObserver: EventObserver) {
+fun FavoritesScreen(navController: NavController, authViewModel: AuthViewModel, favoritesViewModel: FavoritesViewModel, eventObserver: EventObserver) {
     Scaffold(
         modifier = Constants.modifier,
         bottomBar = { CustomBottomNavigationBar(navController, eventObserver) },
         topBar = {
-            CustomTopBar(titleText = "Favorites",navController=navController, amplifyService=amplifyService, eventObserver=eventObserver)
+            CustomTopBar(titleText = "Favorites",navController=navController,authViewModel=authViewModel, eventObserver=eventObserver)
 
         }
     ) {paddingValues ->

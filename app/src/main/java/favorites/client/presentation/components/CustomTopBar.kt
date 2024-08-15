@@ -28,13 +28,15 @@ import favorites.client.common.Constants
 import favorites.client.observers.EventObserver
 import favorites.client.presentation.navigation.Screen
 import favorites.client.presentation.screens.auth.navigateAndPop
+import favorites.client.presentation.viewmodels.AuthViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTopBar(titleText: String,  navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
+fun CustomTopBar(titleText: String,  navController: NavController, authViewModel: AuthViewModel,
+                 eventObserver: EventObserver) {
     val context = LocalContext.current
 
     TopAppBar(
@@ -55,12 +57,7 @@ fun CustomTopBar(titleText: String,  navController: NavController, amplifyServic
         actions = {
             if (Constants.authenticate) IconButton(
                 onClick = {
-                    amplifyService.logOut {
-                        MainScope().launch {
-                            navigateAndPop(navController, Screen.Login.route, eventObserver = eventObserver)
-                        }
-                    }
-
+                    authViewModel.logOut()
                 }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_logout),
