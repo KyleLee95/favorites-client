@@ -41,15 +41,21 @@ class AuthViewModel() : ViewModel() {
         _code.value = value
     }
 
-    fun verifyCode() {
-        _authState.value = AuthState.Loading
-        amplifyService.verifyCode(_username.value, _code.value) {
-            _authState.value = AuthState.Success
-        }
-    }
     fun setAuthState(value: AuthState){
         _authState.value = value
 
+    }
+
+    fun verifyCode() {
+
+        setAuthState(AuthState.Loading)
+        amplifyService.verifyCode(_username.value, _code.value) { isSuccess, errorMessage ->
+            if(isSuccess){
+                setAuthState(AuthState.Success)
+            }else{
+                setAuthState(AuthState.Error(errorMessage ?: "Verifcation failed. The rovided code was incorrect."))
+            }
+        }
     }
 
     fun login() {
@@ -70,8 +76,12 @@ class AuthViewModel() : ViewModel() {
 
     fun signUp() {
         _authState.value = AuthState.Loading
-        amplifyService.signUp(_username.value, _email.value, _password.value) {
-            _authState.value = AuthState.Success
+        amplifyService.signUp(_username.value, _email.value, _password.value) { isSuccess, errorMessage->
+            if(isSuccess){
+                setAuthState(AuthState.Verify)
+            }else{
+                setAuthState(AuthState.Error(errorMessage?: "Signup failed. Please try again."))
+            }
         }
     }
 
@@ -92,5 +102,6 @@ sealed class AuthState {
     object Idle : AuthState()
     object Loading : AuthState()
     object Success : AuthState()
+    object Verify: AuthState()
     data class Error(val message: String) : AuthState()
 }

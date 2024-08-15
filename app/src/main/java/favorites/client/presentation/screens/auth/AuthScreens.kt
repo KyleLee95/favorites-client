@@ -33,76 +33,73 @@ fun SignUpScreen(viewModel: AuthViewModel, navController: NavController, eventOb
 
 
     LaunchedEffect(authState) {
-        if (authState is AuthState.Success) {
+        if (authState is AuthState.Verify) {
             navigateAndPop(navController, Screen.Verify.route, eventObserver)
         } else if (authState is AuthState.Error) {
             // Handle error by showing an error message (e.g., snack bar)
-             viewModel.setErrorMessage((authState as AuthState.Error).message)
+            viewModel.setErrorMessage((authState as AuthState.Error).message)
         }
     }
-    Box(
-        contentAlignment = Alignment.Center,
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
 
-        when (authState) {
-
-            is AuthState.Loading -> {
-                CircularProgressIndicator()
-            }
-            is AuthState.Error -> {
-                Text(
-                    text = (authState as AuthState.Error).message,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
-            else -> {
-                // Default UI
-            }
+        if (authState is AuthState.Error) {
+            Text(
+                text = (authState as AuthState.Error).message,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(7.dp)
+            )
         }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            TextField(
-                value = viewModel.username.value,
-                onValueChange = { viewModel.setUsername(it) },
-                placeholder = { Text(text = "Username") }
-            )
 
-            TextField(
-                value = viewModel.email.value,
-                onValueChange = { viewModel.setEmail(it) },
-                placeholder = { Text(text = "Email") }
-            )
+        TextField(
+            value = viewModel.username.value,
+            onValueChange = { viewModel.setUsername(it) },
+            placeholder = { Text(text = "Username") }
+        )
 
-            TextField(
-                value = viewModel.password.value,
-                onValueChange = { viewModel.setPassword(it) },
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                placeholder = { Text(text = "Password") }
-            )
+        TextField(
+            value = viewModel.email.value,
+            onValueChange = { viewModel.setEmail(it) },
+            placeholder = { Text(text = "Email") }
+        )
 
+        TextField(
+            value = viewModel.password.value,
+            onValueChange = { viewModel.setPassword(it) },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            placeholder = { Text(text = "Password") }
+        )
+
+
+        if (authState is AuthState.Loading) {
+            CircularProgressIndicator()
+            Button(onClick = { viewModel.signUp() }, enabled = false) {
+                Text(text = "Sign Up")
+            }
+        } else {
             Button(onClick = { viewModel.signUp() }) {
                 Text(text = "Sign Up")
             }
-
-            TextButton(onClick = {
-                MainScope().launch {
-                    navigateAndPop(navController, Screen.Login.route, eventObserver = eventObserver)
-                }
-            }) {
-                Text(text = "Already have an account? Login.")
-            }
         }
 
+        TextButton(onClick = {
+            MainScope().launch {
+                navigateAndPop(navController, Screen.Login.route, eventObserver = eventObserver)
+            }
+        }) {
+            Text(text = "Already have an account? Login.")
+        }
     }
-
 }
+
+
+
 
 @Composable
 fun LoginScreen(viewModel: AuthViewModel, navController: NavController, eventObserver: EventObserver) {
@@ -116,30 +113,20 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController, eventObs
              viewModel.setErrorMessage((authState as AuthState.Error).message)
         }
     }
-    when (authState) {
-        is AuthState.Loading -> {
-            CircularProgressIndicator()
-        }
-
-
-
-        is AuthState.Error -> {
-            Text(
-                text = (authState as AuthState.Error).message,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-
-        else -> {
-        }
-    }
 
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
+
+            if(authState is AuthState.Error){
+                Text(
+                    text = (authState as AuthState.Error).message,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
 
                 TextField(
                 value = viewModel.username.value,
@@ -155,14 +142,28 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController, eventObs
                 placeholder = { Text(text = "Password") }
             )
 
-        Button(onClick = {
-            viewModel.login()
-        }
-        ) {
-            Text(text = "Login")
-        }
+            if(authState is AuthState.Loading){
+                CircularProgressIndicator()
+
+                Button(onClick = {
+                    viewModel.login()
+                },
+                    enabled = false
+                ) {
+                    Text(text = "Login")
+                }
+
+            }else {
+                Button(onClick = {
+                    viewModel.login()
+                }
+                ) {
+                    Text(text = "Login")
+                }
+            }
 
                 TextButton(onClick = {
+                    viewModel.setAuthState(AuthState.Idle)
             MainScope().launch {
                 navigateAndPop(navController, Screen.SignUp.route, eventObserver=eventObserver)} }
 
@@ -170,7 +171,7 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController, eventObs
             Text(text = "Don't have an account? Sign up.")
         }
     }
-    }
+}
 
 
 
@@ -191,36 +192,36 @@ fun VerifyScreen(viewModel: AuthViewModel, navController: NavController, eventOb
         }
     }
 
-    when (authState) {
-        is AuthState.Loading -> {
-            CircularProgressIndicator()
-        }
-
-        is AuthState.Error -> {
-            Text(
-                text = (authState as AuthState.Error).message,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-        else -> {
-            // Default UI
-        }
-    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
+
+        // Loading indicator overlay
+        if (authState is AuthState.Error) {
+            Text(
+                text = (authState as AuthState.Error).message,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+
         TextField(
             value = viewModel.code.value,
             onValueChange = { viewModel.setCode(it) },
             placeholder = { Text(text = "Verification Code") }
         )
-
-        Button(onClick = { viewModel.verifyCode() }) {
-            Text(text = "Verify")
+        if(authState is AuthState.Loading){
+            CircularProgressIndicator()
+            Button(onClick = { viewModel.verifyCode() }, enabled = false){
+                Text(text = "Verify")
+            }
+        }else{
+            Button(onClick = { viewModel.verifyCode() }, enabled = viewModel.code.value.isNotEmpty()){
+                Text(text = "Verify")
+            }
         }
     }
 }

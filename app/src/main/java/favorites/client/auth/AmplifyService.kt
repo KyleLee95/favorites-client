@@ -37,23 +37,43 @@ class AmplifyService  {
         )
     }
 
-    fun signUp(username: String, email: String, password: String, onComplete: () -> Unit) {
+    fun signUp(username: String, email: String, password: String, onComplete: (Boolean,String?) -> Unit) {
         val options = AuthSignUpOptions.builder()
             .userAttribute(AuthUserAttributeKey.email(), email)
             .build()
 
-        Amplify.Auth.signUp(username, password, options,
-            { onComplete() },
-            { Log.e("ampy", "Sign Up Error:", it) }
-        )
-    }
+        Amplify.Auth.signUp(
+            username,
+            password,
+            options,
+            { result ->
+                if (result.isSignUpComplete) {
+                    onComplete(true, null) // Sign-up was successful, no error message
+                } else {
+                    onComplete(false, "Sign-up not fully completed. Please try again.")
+                }
+            },
+            { error ->
+                Log.e("ampy", "Sign Up Error:", error)
+                onComplete(false, error.localizedMessage ?: "An unknown error occurred.")
+            }
+        )    }
 
-    fun verifyCode(username: String, code: String, onComplete: () -> Unit) {
+    fun verifyCode(username: String, code: String, onComplete: (Boolean, String?) -> Unit) {
         Amplify.Auth.confirmSignUp(
             username,
             code,
-            { onComplete() },
-            { Log.e("ampy", "Verification Failed: ", it) }
+            { result->
+                if(result.isSignUpComplete){
+                    onComplete(true,null)
+                }else{
+                    onComplete(false, "Verification Failed")
+                }
+            },
+            { error->
+                Log.e("ampy", "Verification Failed: ", error)
+                onComplete(false, error.localizedMessage ?: "An unknown error occurred.")
+            }
         )
     }
 
