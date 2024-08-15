@@ -46,6 +46,7 @@ import com.skydoves.landscapist.glide.GlideImage
 //import com.skydoves.landscapist.glide.GlideImage
 import favorites.client.common.Constants
 import favorites.client.common.Constants.modifier
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.ui.theme.SuccessGreen
 
@@ -54,7 +55,8 @@ import favorites.ui.theme.SuccessGreen
 @Composable
 fun DetailsScreen(
     artViewModel: ArtViewModel,
-    navController: NavController
+    navController: NavController,
+    eventObserver: EventObserver
 ) {
 
     //observe the book
@@ -218,47 +220,6 @@ fun DetailsScreen(
                             fontSize = 22.sp
                         )
                     }
-
-
-
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.Start),
-                    ) {
-
-//                        isClosed?.let {
-//                            val isOpen = if (it) "Closed" else "Open Now"
-//                            val textColor = if (it) ErrorRed else SuccessGreen
-//                            Text(
-//                                text = isOpen,
-//                                modifier = Modifier,
-//                                style = TextStyle(
-//                                    fontWeight = FontWeight.Bold,
-//                                    color = textColor
-//                                ),
-//                                textAlign = TextAlign.Start,
-//                                fontSize = 18.sp
-//                            )
-//                        }
-
-
-//                        businessHours?.let {
-//                            val businessOpenHours = it[0].open[0]
-//                            val opensAt = convertMilitaryTo12HourTime(businessOpenHours.start)
-//                            val closesAt = convertMilitaryTo12HourTime(businessOpenHours.end)
-//                            Text(
-//                                text = "${opensAt} - ${closesAt}",
-//                                modifier = Modifier.padding(10.dp, 0.dp),
-//                                style = TextStyle(
-//                                    fontWeight = FontWeight.Bold,
-//                                    color = Color.Gray,
-//                                    fontSize = 18.sp
-//                                )
-//                            )
-//                        }
-                    }
                 }
                 HorizontalDivider(modifier = Modifier.padding(10.dp))
                 Button(
@@ -268,6 +229,7 @@ fun DetailsScreen(
                         .fillMaxWidth(1f),
 
                     onClick = {
+                        eventObserver.logUserEvent(event = "add-to-favorites-${artwork.id}")
                         Toast.makeText(
                             activity,
                             "Added to Favorites!",
@@ -292,5 +254,5 @@ fun DetailsScreen(
 @Preview
 fun DetailsPreview() {
     val artViewModel = ArtViewModel()
-    DetailsScreen(artViewModel=artViewModel, navController = rememberNavController())
+    DetailsScreen(artViewModel=artViewModel, navController = rememberNavController(), eventObserver = EventObserver(sessionEmail = "test@email.com"))
 }

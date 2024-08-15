@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.components.CustomBottomNavigationBar
 import favorites.client.presentation.screens.search.paging.ArtList
 import favorites.client.presentation.screens.search.paging.SearchOperation
@@ -44,6 +45,7 @@ fun CustomOutlinedTextField(
     keyboardType: KeyboardType,
     imeAction: ImeAction,
     onSearchDone: (() -> Unit)?,
+    logEvent: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -57,6 +59,7 @@ fun CustomOutlinedTextField(
         keyboardActions = KeyboardActions(
             onSearch = {
                 if (onSearchDone != null) {
+                    logEvent(textState)
                     onSearchDone()
                 }
                 focusManager.clearFocus()
@@ -78,7 +81,8 @@ fun CustomOutlinedTextField(
 @Composable
 fun SearchScreen(
     artViewModel: ArtViewModel,
-    navController: NavController
+    navController: NavController,
+    eventObserver: EventObserver
 ) {
     val state = artViewModel.searchState.value
     val queryText = artViewModel.queryText.value
@@ -95,8 +99,6 @@ fun SearchScreen(
                         fontSize = 20.sp
                     )
                 }
-
-
             )
         },
         bottomBar = {
@@ -116,8 +118,9 @@ fun SearchScreen(
                 textState = queryText,
                 onTextChange = artViewModel::setQueryText,
                 keyboardType = KeyboardType.Text,
-                ImeAction.Search,
-                artViewModel::onSearch
+                imeAction = ImeAction.Search,
+                onSearchDone = artViewModel::onSearch,
+                logEvent = {searchTerm -> eventObserver.logUserEvent("search=$searchTerm")}
             )
 
 
@@ -137,7 +140,7 @@ fun SearchScreen(
                     }
                 }
                 SearchOperation.DONE -> {
-                    ArtList(artViewModel = artViewModel, navController=navController)
+                    ArtList(artViewModel = artViewModel, navController=navController, eventObserver=eventObserver)
                 }
                 else -> {
                     Box {}

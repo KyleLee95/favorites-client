@@ -68,7 +68,6 @@ fun ArtworkRow(
             }
 
             Column() {
-
                 Text(
                     //sometimes, the authors are null; for example when it is a United Nations report
                     text = artwork.title,

@@ -2,11 +2,13 @@ package favorites.client.presentation.navigation
 
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.LifecycleObserver
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import favorites.client.auth.AmplifyService
 import favorites.client.common.Constants
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.screens.auth.LoginScreen
 import favorites.client.presentation.screens.auth.SignUpScreen
 import favorites.client.presentation.screens.auth.VerifyScreen
@@ -22,6 +24,7 @@ fun Navigation(
     navController: NavHostController,
     favoritesViewModel: FavoritesViewModel,
     artViewModel: ArtViewModel,
+    eventObserver: EventObserver,
     amplifyService: AmplifyService
 ) {
 
@@ -41,29 +44,53 @@ fun Navigation(
         composable(Screen.Search.route) {
             SearchScreen(
                 artViewModel = artViewModel,
-                navController = navController
+                navController = navController,
+                eventObserver = eventObserver
             )
         }
 
         composable(Screen.Detail.route){
-            DetailsScreen(artViewModel = artViewModel, navController = navController)
+            DetailsScreen(
+                artViewModel = artViewModel,
+                navController = navController,
+                eventObserver = eventObserver
+            )
         }
 
         composable(Screen.Favorites.route) {
-            FavoritesScreen( navController = navController, amplifyService=amplifyService)
+            FavoritesScreen(
+                navController = navController,
+                amplifyService=amplifyService,
+                favoritesViewModel = favoritesViewModel,
+                eventObserver= eventObserver
+            )
         }
 
         composable(Screen.Contact.route) {
-            ContactScreen(navController = navController, amplifyService=amplifyService)
+            ContactScreen(
+                navController = navController,
+                amplifyService=amplifyService,
+                eventObserver = eventObserver
+                )
         }
 
 
         composable(Screen.SignUp.route){
-            SignUpScreen(viewModel = favoritesViewModel, navController = navController , amplifyService = amplifyService)
+            SignUpScreen(
+                viewModel = favoritesViewModel,
+                navController = navController ,
+                amplifyService = amplifyService,
+                eventObserver = eventObserver
+                )
         }
 
         composable(Screen.Verify.route) {
-            VerifyScreen(viewModel = favoritesViewModel, navController = navController, amplifyService=amplifyService)
+            VerifyScreen(
+                viewModel = favoritesViewModel,
+                navController = navController,
+                amplifyService=amplifyService,
+                eventObserver = eventObserver
+                )
         }
 
 

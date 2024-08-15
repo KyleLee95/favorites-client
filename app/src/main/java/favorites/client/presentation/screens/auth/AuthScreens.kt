@@ -14,15 +14,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import favorites.client.auth.AmplifyService
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.navigation.Screen
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService) {
+fun SignUpScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
 
 
     Column(
@@ -54,7 +54,7 @@ fun SignUpScreen(viewModel: FavoritesViewModel, navController: NavController, am
         Button(onClick = {
             amplifyService.signUp(viewModel.username.value, viewModel.email.value, viewModel.password.value){
                 MainScope().launch {
-                    navigateAndPop(navController, Screen.Verify.route)
+                    navigateAndPop(navController, Screen.Verify.route, eventObserver =eventObserver )
                 }
 
             }
@@ -66,14 +66,13 @@ fun SignUpScreen(viewModel: FavoritesViewModel, navController: NavController, am
 
         TextButton(onClick = {
             MainScope().launch {
-                navigateAndPop(navController, Screen.Login.route)}}) {
+                navigateAndPop(navController, Screen.Login.route, eventObserver=eventObserver)}}) {
             Text(text = "Already have an account? Login.")
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService) {
+fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
 
 
     Column(
@@ -101,7 +100,7 @@ fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amp
                 //this method will log the user's email address to Logcat. Filter for ampy
                 amplifyService.fetchEmailAndLog()
                 MainScope().launch {
-                    navigateAndPop(navController, Screen.Search.route)
+                    navigateAndPop(navController, Screen.Search.route, eventObserver = eventObserver)
                 }
 
             }
@@ -114,16 +113,15 @@ fun LoginScreen(viewModel: FavoritesViewModel, navController: NavController, amp
 
         TextButton(onClick = {
             MainScope().launch {
-                navigateAndPop(navController, Screen.SignUp.route)} }
+                navigateAndPop(navController, Screen.SignUp.route, eventObserver=eventObserver)} }
 
         ) {
             Text(text = "Don't have an account? Sign up.")
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VerifyScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService) {
+fun VerifyScreen(viewModel: FavoritesViewModel, navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
 
 
     Column(
@@ -141,23 +139,23 @@ fun VerifyScreen(viewModel: FavoritesViewModel, navController: NavController, am
 
             amplifyService.verifyCode(viewModel.username.value, viewModel.code.value){
                 MainScope().launch {
-                    navigateAndPop(navController, Screen.Login.route)
+                    navigateAndPop(navController, Screen.Login.route, eventObserver)
                 }
-
+                eventObserver.logUserEvent(event="verify-${viewModel.username.value}")
             }
-
         }) {
             Text(text = "Verify")
         }
     }
 }
 
-fun navigateAndPop(navController: NavController, routeString:String){
+fun navigateAndPop(navController: NavController, routeString:String, eventObserver: EventObserver){
     navController.navigate(routeString) {
         // Pop up to the start destination of the graph to
         // avoid building up a large stack of destinations
         // on the back stack as users select items
         navController.graph.startDestinationRoute?.let { route ->
+            eventObserver.logUserEvent(event="navigate-$route")
             popUpTo(route) {
                 saveState = true
             }

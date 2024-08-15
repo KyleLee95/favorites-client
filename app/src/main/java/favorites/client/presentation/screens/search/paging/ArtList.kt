@@ -14,11 +14,12 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.navigation.Screen
 import favorites.client.presentation.viewmodels.ArtViewModel
 
 @Composable
-fun ArtList(artViewModel: ArtViewModel, navController: NavController) {
+fun ArtList(artViewModel: ArtViewModel, navController: NavController, eventObserver: EventObserver) {
 
     //this is what consumes the flow
     val lazyPagingItems = artViewModel.searchState.value.data?.collectAsLazyPagingItems()
@@ -31,6 +32,7 @@ fun ArtList(artViewModel: ArtViewModel, navController: NavController) {
         ) { index ->
             val boolArtwork = lazyPagingItems[index]!!
             ArtworkRow(artwork = boolArtwork){
+                eventObserver.logUserEvent("search-detail-${boolArtwork.id}")
                 artViewModel.setArtwork(boolArtwork)
                 navController.navigate(route=Screen.Detail.route)
             }

@@ -18,13 +18,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import favorites.client.auth.AmplifyService
 import favorites.client.common.Constants
+import favorites.client.observers.EventObserver
 import favorites.client.presentation.viewmodels.FavoritesViewModel
 import favorites.client.presentation.components.CustomBottomNavigationBar
 import favorites.client.presentation.components.CustomTopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesScreen(navController: NavController, amplifyService: AmplifyService) {
+fun FavoritesScreen(navController: NavController, amplifyService: AmplifyService, favoritesViewModel: FavoritesViewModel, eventObserver: EventObserver) {
     Scaffold(
         modifier = Constants.modifier,
         bottomBar = { CustomBottomNavigationBar(navController) },

@@ -6,6 +6,6 @@ import retrofit2.Response
 
 // Define your Retrofit API service
 interface LoggingServiceApi {
-    @POST("logs")
+    @POST("logs/")
     suspend fun logEvent(@Body logEvent: LogEvent): Response<LogEvent>
 }

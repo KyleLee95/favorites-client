@@ -21,11 +21,10 @@ import favorites.client.auth.AmplifyService
 import favorites.client.presentation.components.CustomBottomNavigationBar
 import favorites.client.presentation.components.CustomTopBar
 import favorites.client.common.Constants
+import favorites.client.observers.EventObserver
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactScreen( navController: NavController, amplifyService: AmplifyService) {
-
+fun ContactScreen( navController: NavController, amplifyService: AmplifyService, eventObserver: EventObserver) {
     Scaffold(
         modifier = Constants.modifier,
         bottomBar = { CustomBottomNavigationBar(navController) },
