@@ -10,12 +10,11 @@ import favorites.client.data.models.artworks.Datum
 import favorites.client.data.models.favorites.FavoritesResponse
 import favorites.client.data.models.favorites.Favorite
 
-
 object Constants {
     val modifier = Modifier.padding(paddingValues = PaddingValues(all = 0.dp))
-    val favoritesServiceBaseUrl = "http://localhost:8000/favorites/" //change for prod
-    val loggingServiceBaseUrl = "https://2aa2-70-107-215-6.ngrok-free.app/"
-    val artApiServiceBaseUrl = "https://d7ce-70-107-215-6.ngrok-free.app/" // Route our outbound API calls through our own backend.
+    val favoritesServiceBaseUrl = "https://:favorites-service.hfu5mq8dph6eg.us-east-1.cs.amazonlightsail.com/" //change for prod
+    val loggingServiceBaseUrl = "https://logging-service.hfu5mq8dph6eg.us-east-1.cs.amazonlightsail.com/"
+    val artApiServiceBaseUrl = "https://: art-service.hfu5mq8dph6eg.us-east-1.cs.amazonlightsail.com/"
     val samMailerBaseUrl =  "https://an9qng3mw0.execute-api.us-east-1.amazonaws.com/Prod/"
     var authenticate = true
 

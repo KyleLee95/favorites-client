@@ -11,4 +11,6 @@ data class Paginate(
 data class PaginateFavorites(
     val page: Int =0,
     val limit: Int = 20,
+    val user_session_email: String = "",
+    val query: String = "",
 )

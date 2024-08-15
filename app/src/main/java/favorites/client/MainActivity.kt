@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 {
                     Navigation(
                         artViewModel = ArtViewModel(),
-                        favoritesViewModel = FavoritesViewModel(),
+                        favoritesViewModel = FavoritesViewModel(authViewModel),
                         samMailerViewModel = SamMailerViewModel(),
                         authViewModel = authViewModel,
                         navController = navController,

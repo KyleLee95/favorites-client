@@ -12,6 +12,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import favorites.client.common.Constants
 import favorites.client.data.models.favorites.Favorite
+import favorites.client.data.models.favorites.FavoriteRequest
 import favorites.client.data.repository.ApiProvider
 import favorites.client.presentation.screens.search.paging.FavoritesSource
 import favorites.client.presentation.screens.search.paging.SearchOperation
@@ -20,7 +21,7 @@ import favorites.client.presentation.screens.search.paging.PaginateFavorites
 import kotlinx.coroutines.launch
 
 
-class FavoritesViewModel: ViewModel() {
+class FavoritesViewModel(private val authViewModel: AuthViewModel): ViewModel() {
     private val favoritesRepository: FavoritesRepository = FavoritesRepository(ApiProvider.favoritesApi())
 
     // Loading and Error State
@@ -39,6 +40,7 @@ class FavoritesViewModel: ViewModel() {
 
 
     // FAVORITES //
+
 
 
     private var _queryText = mutableStateOf("")
@@ -64,7 +66,6 @@ class FavoritesViewModel: ViewModel() {
         currentPage = 1
         _searchState.value = FavoritesSearchState(searchOperation = SearchOperation.LOADING)
         viewModelScope.launch {
-            try {
                 _searchState.value = FavoritesSearchState(
                     data = Pager(
                         config = PagingConfig(pageSize = 10, prefetchDistance = 5),
@@ -72,17 +73,34 @@ class FavoritesViewModel: ViewModel() {
                             FavoritesSource(
                                 favoritesRepository = favoritesRepository,
                                 paginateData = PaginateFavorites(
-                                    page = currentPage
-                                )
+                                    page = currentPage,
+                                    user_session_email = authViewModel.email.value,
+                                    query = _queryText.value
+                                    )
                             )
                         }
                     ).flow.cachedIn(viewModelScope),
                     searchOperation = SearchOperation.DONE
                 )
-            }catch(e:Exception){
-                _errorMessage.value = "An error occurred while fetching favorites: ${e.localizedMessage}"
+        }
+    }
+
+
+    // Function to delete a favorite
+    fun deleteFavorite(favoriteId: String) {
+        setLoading(true)
+        viewModelScope.launch {
+            try {
+                val response = favoritesRepository.deleteFavorite(favoriteId)
+                if (response.isSuccessful) {
+                    // Handle successful deletion (e.g., show a message)
+                } else {
+                    setErrorMessage("Failed to delete favorite: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                setErrorMessage("An error occurred: ${e.localizedMessage}")
             } finally {
-                _isLoading.value = false
+                setLoading(false)
             }
         }
     }

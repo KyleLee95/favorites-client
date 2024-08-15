@@ -1,4 +1,4 @@
-package favorites.client.presentation.screens.details
+package favorites.client.presentation.screens.favorites
 
 
 import android.app.Activity
@@ -47,22 +47,23 @@ import com.skydoves.landscapist.glide.GlideImage
 import favorites.client.common.Constants
 import favorites.client.common.Constants.modifier
 import favorites.client.observers.EventObserver
+import favorites.client.presentation.screens.details.DetailsScreen
 import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.client.presentation.viewmodels.AuthViewModel
+import favorites.client.presentation.viewmodels.FavoritesViewModel
 import favorites.ui.theme.SuccessGreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsScreen(
-    artViewModel: ArtViewModel,
+fun FavoritesDetailsScreen(
+    favoritesViewModel: FavoritesViewModel,
     authViewModel: AuthViewModel,
     navController: NavController,
     eventObserver: EventObserver
 ) {
 
-    //observe the book
-    val artwork = artViewModel.artwork.value
+    val favorite = favoritesViewModel.favorite.value
     val activity = (LocalContext.current as? Activity)
 
 
@@ -132,11 +133,11 @@ fun DetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(300.dp),
-                    imageModel = "https://www.artic.edu/iiif/2/".plus(artwork.imageId)
+                    imageModel = "https://www.artic.edu/iiif/2/".plus(favorite.artwork.imageId)
                         .plus("/full/843,/0/default.png"),
                     contentScale = ContentScale.Fit
                 )
-                with(artwork) {
+                with(favorite.artwork) {
                     title?.let {
                         Text(
                             text = it,
@@ -213,7 +214,7 @@ fun DetailsScreen(
 
                     exhibitionHistory?.let{
                         Text(
-                            text = it,
+                            text = it.toString(),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .align(Alignment.Start),
@@ -231,18 +232,18 @@ fun DetailsScreen(
                         .fillMaxWidth(1f),
 
                     onClick = {
-                        eventObserver.logUserEvent(event = "add-to-favorites-${artwork.id}")
-                        artViewModel.addArtworkToFavorites(userSessionEmail = authViewModel.email.value)
+                        eventObserver.logUserEvent(event = "remove-from-favorites-${favorite.id}")
+                        favoritesViewModel.deleteFavorite(favoriteId = favorite.id)
                         Toast.makeText(
                             activity,
-                            "Added to Favorites!",
+                            "Removed Favorites!",
                             Toast.LENGTH_LONG
                         ).show()
                     },
                     colors =
                     ButtonDefaults.buttonColors(containerColor = SuccessGreen)
                 ) {
-                    Text(text = "Add to Favorites")
+                    Text(text = "Remove from Favorites")
                 }
 
             }

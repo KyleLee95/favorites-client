@@ -13,6 +13,7 @@ import favorites.client.presentation.screens.auth.VerifyScreen
 import favorites.client.presentation.screens.contact.ContactScreen
 import favorites.client.presentation.screens.search.SearchScreen
 import favorites.client.presentation.screens.details.DetailsScreen
+import favorites.client.presentation.screens.favorites.FavoritesDetailsScreen
 import favorites.client.presentation.screens.favorites.FavoritesScreen
 import favorites.client.presentation.viewmodels.ArtViewModel
 import favorites.client.presentation.viewmodels.AuthViewModel
@@ -52,6 +53,7 @@ fun Navigation(
 
         composable(Screen.Detail.route){
             DetailsScreen(
+                authViewModel = authViewModel,
                 artViewModel = artViewModel,
                 navController = navController,
                 eventObserver = eventObserver
@@ -91,6 +93,16 @@ fun Navigation(
                 navController = navController,
                 eventObserver = eventObserver
                 )
+        }
+
+        composable(Screen.FavoritesDetail.route){
+            FavoritesDetailsScreen(
+                favoritesViewModel = favoritesViewModel,
+                authViewModel = authViewModel,
+                navController =navController ,
+                eventObserver = eventObserver
+            )
+
         }
 
 

@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomOutlinedTextField(
     title: String,
@@ -26,7 +25,7 @@ fun CustomOutlinedTextField(
     onTextChange: (String) -> Unit,
     keyboardType: KeyboardType,
     imeAction: ImeAction,
-    onSearchDone: (() -> Unit)?,
+    onSearchDone: (() -> Unit)?, logEvent: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 

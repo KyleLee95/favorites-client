@@ -21,7 +21,7 @@ class FavoritesSource(
         return try {
             val currentPage = params.key ?: 1
 
-            val response = favoritesRepository.getFavorites(page = currentPage, limit = params.loadSize)
+            val response = favoritesRepository.searchFavorites(page = currentPage, limit = params.loadSize, query=paginateData.query, user_session_email=paginateData.user_session_email )
 
             if (response.isSuccessful) {
                 val body = response.body()

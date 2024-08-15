@@ -10,6 +10,7 @@ sealed class Screen(var route: String, var icon: Int, var title: String) {
     object SignUp : Screen("signup", 0, "Signup")
     object Verify : Screen("verify", 0, "Verify")
     object Favorites : Screen("favorites", R.drawable.ic_favorite, "Favorites")
+    object FavoritesDetail : Screen("favorites-detail", R.drawable.ic_favorite, "Favorite")
     object Contact: Screen("contact", R.drawable.ic_book, "Contact")
 
 

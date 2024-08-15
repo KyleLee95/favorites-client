@@ -31,50 +31,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import favorites.client.observers.EventObserver
 import favorites.client.presentation.components.CustomBottomNavigationBar
+import favorites.client.presentation.components.CustomOutlinedTextField
 import favorites.client.presentation.screens.search.paging.ArtList
 import favorites.client.presentation.screens.search.paging.SearchOperation
 import favorites.client.presentation.viewmodels.ArtViewModel
 
 
-@Composable
-fun CustomOutlinedTextField(
-    title: String,
-    placeHolder: String,
-    textState: String,
-    onTextChange: (String) -> Unit,
-    keyboardType: KeyboardType,
-    imeAction: ImeAction,
-    onSearchDone: (() -> Unit)?,
-    logEvent: (String) -> Unit
-) {
-    val focusManager = LocalFocusManager.current
-
-    OutlinedTextField(
-        placeholder = { Text(text = placeHolder) },
-        value = textState,
-        onValueChange = { onTextChange(it) },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = keyboardType, imeAction = imeAction,
-        ),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                if (onSearchDone != null) {
-                    logEvent(textState)
-                    onSearchDone()
-                }
-                focusManager.clearFocus()
-            }
-        ),
-        singleLine = true,
-        label = { Text(title) },
-        modifier = Modifier.padding(10.dp, 0.dp),
-        textStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp, color = Color.Black,
-        ),
-
-        )
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
