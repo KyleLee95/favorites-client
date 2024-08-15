@@ -23,36 +23,6 @@ import kotlinx.coroutines.launch
 class FavoritesViewModel: ViewModel() {
     private val favoritesRepository: FavoritesRepository = FavoritesRepository(ApiProvider.favoritesApi())
 
-
-    // AUTH //
-
-    private var _username = mutableStateOf("")
-    val username: State<String> = _username
-
-    private var _email = mutableStateOf("")
-    val email: State<String> = _email
-
-    private var _password = mutableStateOf("")
-    val password: State<String> = _password
-
-    private var _code = mutableStateOf("")
-    val code: State<String> = _code
-
-    fun setUsername(text: String){
-        _username.value = text
-    }
-    fun setEmail(text: String){
-        _email.value = text
-    }
-
-    fun setPassword(text: String){
-        _password.value = text
-    }
-
-    fun setCode(text: String){
-        _code.value = text
-    }
-
     // Loading and Error State
     private var _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading

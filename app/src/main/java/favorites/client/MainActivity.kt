@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         amplifyService.configureAmplify(this)
 
-        val eventObserver = EventObserver(sessionEmail="kchow1@uchicago.edu")
+        val eventObserver = EventObserver(sessionEmail=FavoritesViewModel().email.value)
         ProcessLifecycleOwner.get().lifecycle.addObserver(eventObserver)
 
 
